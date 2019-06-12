@@ -1,7 +1,7 @@
-module Bulma.Internal exposing (Attrs, Builder, Children, Modifier, Wrapper, withClass, wrapHtml)
+module Bulma.Internal exposing (Attrs, Builder, Children, Modifier, Wrapper, liftTree, withClass, wrapHtml)
 
 import Html as H exposing (Attribute, Html)
-import Html.Attributes as A
+import Html.Attributes exposing (class)
 
 
 type alias Modifier msg =
@@ -38,10 +38,21 @@ withClass className liftHtml =
                         liftHtml value
                 in
                 builder
-                    ([ A.class className ] ++ attrs)
+                    ([ class className ] ++ attrs)
                     newChildren
 
 
 wrapHtml : String -> Wrapper msg (Children msg)
 wrapHtml className =
     withClass className identity
+
+
+liftTree : String -> Builder msg -> Children msg -> Children msg
+liftTree className builder children =
+    case children of
+        [] ->
+            []
+
+        subTree ->
+            List.singleton <|
+                builder [ class className ] subTree

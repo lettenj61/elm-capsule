@@ -20,8 +20,20 @@ container attrs children =
 
 
 hero : Builder msg
-hero =
-    wrapHtml "hero" H.div
+hero attrs children =
+    let
+        heroBody =
+            wrapHtml "hero-body" H.div
+
+        content_ =
+            [ container [] children ]
+    in
+    H.section
+        ([ A.class "hero" ] ++ attrs)
+        [ heroBody
+            []
+            content_
+        ]
 
 
 columns : Builder msg
@@ -41,6 +53,11 @@ column =
 content : Builder msg
 content =
     wrapHtml "content" H.div
+
+
+button : Wrapper msg String
+button =
+    withClass "button" (List.singleton << H.text)
 
 
 

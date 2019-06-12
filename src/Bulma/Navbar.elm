@@ -26,22 +26,21 @@ navbarOptions =
     }
 
 
-navbar : Navbar msg -> Attrs msg -> Html msg
-navbar options =
+navbar : Attrs msg -> Navbar msg -> Html msg
+navbar attrs options =
     let
         { brand, menuStart, menuEnd } =
             options
     in
-    \attrs ->
-        H.nav
-            ([ A.class "navbar" ] ++ attrs)
-            [ H.div [ A.class "navbar-brand" ] [ brand ]
-            , H.div
-                [ A.class "navbar-menu" ]
-                [ H.div [ A.class "navbar-start" ] menuStart
-                , H.div [ A.class "navbar-end" ] menuEnd
-                ]
+    H.nav
+        ([ A.class "navbar" ] ++ attrs)
+        [ H.div [ A.class "navbar-brand" ] [ brand ]
+        , H.div
+            [ A.class "navbar-menu" ]
+            [ H.div [ A.class "navbar-start" ] menuStart
+            , H.div [ A.class "navbar-end" ] menuEnd
             ]
+        ]
 
 
 navbarItem : Attribute msg
