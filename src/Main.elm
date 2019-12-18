@@ -1,9 +1,12 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Capsule.Color exposing (danger, greyLighter, warning)
+import Capsule.Element as Element
+import Capsule.Layout as Layout
+import Capsule.Modifiers exposing (backgroundColor, color)
+import Html exposing (Html)
+import Html.Attributes exposing (class, style)
 
 
 
@@ -25,13 +28,12 @@ main =
 
 
 type alias Model =
-    { field : Maybe String
-    }
+    Maybe String
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( { field = Nothing }
+    ( Nothing
     , Cmd.none
     )
 
@@ -55,9 +57,53 @@ update msg model =
 -- VIEW
 
 
-view : Model -> Html Msg
-view model =
-    text ""
+view : Model -> Html msg
+view _ =
+    Layout.section
+        [ backgroundColor greyLighter
+        , style "height" "100vh"
+        ]
+        [ viewContent ]
+
+
+viewContent : Html msg
+viewContent =
+    Layout.container
+        []
+        [ Element.box
+            [ class "is-radiusless" ]
+            [ Html.text "Lorem ipsum" ]
+        , Element.box
+            []
+            [ Html.p
+                []
+                [ Html.text "Impressed" ]
+            , Element.button
+                [ color danger ]
+                [ Html.text "Give 100" ]
+            ]
+        , viewMedia
+        , Element.notification
+            [ color warning ]
+            [ Html.text "You missed somethin'" ]
+        ]
+
+
+viewMedia : Html msg
+viewMedia =
+    let
+        defaultMedia =
+            Layout.defaultMedia
+    in
+    Layout.media
+        []
+        { defaultMedia
+            | content =
+                [ Element.content
+                    []
+                    [ Html.text "inside media" ]
+                ]
+        }
 
 
 

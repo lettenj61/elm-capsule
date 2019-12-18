@@ -1,10 +1,10 @@
 module Capsule.Html exposing
     ( Tagger
-    , box
+    , decorate
+    , withMixins
     )
 
 import Html exposing (Attribute, Html)
-import Html.Attributes exposing (class)
 
 
 
@@ -16,16 +16,12 @@ type alias Tagger msg =
 
 
 
--- BASIC ELEMENTS
+-- DECORATIONS
 
 
-box : Tagger msg
-box =
-    Html.div |> withMixins [ class "box" ]
-
-
-
--- WITH MIXINS
+decorate : Tagger msg -> List (Attribute msg) -> Tagger msg
+decorate tagger mixins =
+    withMixins mixins tagger
 
 
 withMixins : List (Attribute msg) -> Tagger msg -> Tagger msg
