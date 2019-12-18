@@ -100,3 +100,8 @@ whiteTer =
 whiteBis : Color
 whiteBis =
     Color "white-bis"
+
+
+toString : Color -> String
+toString (Color name) =
+    name

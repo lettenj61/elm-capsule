@@ -5,11 +5,21 @@ module Capsule.Element exposing
     , content
     , deleteAnchor
     , deleteButton
+    , deleteTag
     , icon
     , image
     , notification
+    , progress
+    , subtitle
+    , table
+    , tableContainer
+    , tag
+    , tags
+    , title
     , toDelete
     , toImage
+    , toSubtitle
+    , toTitle
     )
 
 import Capsule.Html exposing (Tagger, withMixins)
@@ -33,7 +43,7 @@ button =
 
 buttonAnchor : Tagger msg
 buttonAnchor =
-    Html.a |> withMixins [ class "a" ]
+    Html.a |> withMixins [ class "button" ]
 
 
 content : Tagger msg
@@ -89,3 +99,59 @@ toImage =
 notification : Tagger msg
 notification =
     Html.div |> withMixins [ class "notification" ]
+
+
+progress : Tagger msg
+progress =
+    Html.progress |> withMixins [ class "progress" ]
+
+
+tableContainer : Tagger msg
+tableContainer =
+    Html.div |> withMixins [ class "table-container" ]
+
+
+table : Tagger msg
+table =
+    Html.table |> withMixins [ class "table" ]
+
+
+tag : Tagger msg
+tag =
+    toTag Html.span
+
+
+tags : Tagger msg
+tags =
+    Html.div |> withMixins [ class "tags" ]
+
+
+deleteTag : Tagger msg
+deleteTag =
+    Html.a
+        |> withMixins [ class "tag", class "is-delete" ]
+
+
+toTag : Tagger msg -> Tagger msg
+toTag =
+    withMixins [ class "tag" ]
+
+
+title : Tagger msg
+title =
+    toTitle Html.h1
+
+
+toTitle : Tagger msg -> Tagger msg
+toTitle =
+    withMixins [ class "title" ]
+
+
+subtitle : Tagger msg
+subtitle =
+    toSubtitle Html.span
+
+
+toSubtitle : Tagger msg -> Tagger msg
+toSubtitle =
+    withMixins [ class "subtitle" ]

@@ -1,9 +1,16 @@
 module Capsule.Layout exposing
     ( container
     , defaultMedia
+    , fluidContainer
+    , fullheightHero
+    , hero
+    , level
+    , levelItem
     , media
     , section
     , toContainer
+    , toLevel
+    , toLevelItem
     , toMedia
     )
 
@@ -21,6 +28,12 @@ container =
     toContainer Html.div
 
 
+fluidContainer : Tagger msg
+fluidContainer =
+    Html.div
+        |> withMixins [ class "container", class "is-fluid" ]
+
+
 toContainer : Tagger msg -> Tagger msg
 toContainer =
     withMixins [ class "container" ]
@@ -29,6 +42,40 @@ toContainer =
 section : Tagger msg
 section =
     Html.section |> withMixins [ class "section" ]
+
+
+
+-- LEVEL
+
+
+type alias LevelProps msg =
+    { left : List (Html msg)
+    , right : List (Html msg)
+    }
+
+
+level : List (Attribute msg) -> LevelProps msg -> Html msg
+level =
+    toLevel Html.nav
+
+
+toLevel : Tagger msg -> List (Attribute msg) -> LevelProps msg -> Html msg
+toLevel tagger attributes props =
+    tagger
+        (class "level" :: attributes)
+        [ Html.div [ class "level-left" ] props.left
+        , Html.div [ class "level-right" ] props.right
+        ]
+
+
+levelItem : Tagger msg
+levelItem =
+    toLevelItem Html.div
+
+
+toLevelItem : Tagger msg -> Tagger msg
+toLevelItem =
+    withMixins [ class "level-item" ]
 
 
 
@@ -66,3 +113,36 @@ toMedia tagger attributes props =
             [ class "media-right" ]
             props.right
         ]
+
+
+
+-- HERO
+
+
+type alias FullheightHeroProps msg =
+    { navbar : List (Html msg)
+    , content : List (Html msg)
+    , foot : List (Html msg)
+    }
+
+
+hero : List (Attribute msg) -> List (Html msg) -> Html msg
+hero attributes heroContent =
+    Html.section
+        (class "hero" :: attributes)
+        [ Html.div
+            [ class "hero-body" ]
+            [ container [] heroContent
+            ]
+        ]
+
+
+fullheightHero : List (Attribute msg) -> FullheightHeroProps msg -> Html msg
+fullheightHero attributes props =
+    Html.section
+        (class "hero" :: attributes)
+        [ Html.div [ class "hero-head" ] props.navbar
+        , Html.div [ class "hero-body" ] props.content
+        , Html.div [ class "hero-foot" ] props.foot
+        ]
+

@@ -2,12 +2,13 @@ module Capsule.Modifiers exposing
     ( backgroundColor
     , color
     , textColor
+    , sizeIs
     )
 
-import Capsule.Color exposing (Color)
-import Capsule.Html.Internal exposing (toClass)
-import Capsule.Html.Responsive as Responsive
+import Capsule.Color as Color exposing (Color)
+import Capsule.Size as Size exposing (Size)
 import Html exposing (Attribute)
+import Html.Attributes exposing (class)
 
 
 
@@ -15,15 +16,20 @@ import Html exposing (Attribute)
 
 
 backgroundColor : Color -> Attribute msg
-backgroundColor =
-    Responsive.backgroundColor >> toClass
+backgroundColor name =
+    class <| "has-background-" ++ Color.toString name
 
 
 color : Color -> Attribute msg
-color =
-    Responsive.color >> toClass
+color name =
+    class <| "is-" ++ Color.toString name
 
 
 textColor : Color -> Attribute msg
-textColor =
-    Responsive.textColor >> toClass
+textColor name =
+    class <| "has-text-" ++ Color.toString name
+
+
+sizeIs : Size -> Attribute msg
+sizeIs name =
+    class <| "is-" ++ Size.toString name

@@ -1,6 +1,6 @@
 module Capsule exposing (Modifier)
 
-import Capsule.Modifier.Internal as Internal
+import Capsule.Html.Internal as Internal
 
 
 type alias Modifier =
