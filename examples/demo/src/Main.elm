@@ -1,17 +1,17 @@
 module Main exposing (main)
 
 import Browser exposing (Document)
-import Capsule.Columns exposing (column, columnWidth, columns, half, oneQuarter)
+import Capsule.Columns exposing (column, columnWidth, columns, oneQuarter)
 import Capsule.Element as El
 import Capsule.Forms as Forms
 import Capsule.Forms.Control as Control
 import Capsule.Layout as Layout
-import Capsule.Modifiers exposing (backgroundColor, color, size, textColor)
+import Capsule.Modifiers exposing (color, size)
 import Capsule.Style as Style
 import Capsule.Types.Color exposing (dark, primary, success)
-import Capsule.Types.Size exposing (medium)
+import Capsule.Types.Size exposing (large)
 import Html exposing (Html, text)
-import Html.Attributes as Attributes exposing (class, readonly, style, type_)
+import Html.Attributes as Attributes exposing (class, name, readonly, style, type_)
 import Html.Events as Events
 
 
@@ -33,13 +33,34 @@ main =
 -- INIT
 
 
+type Fruits
+    = Apple
+    | Banana
+    | Grape
+
+
+fruitsToString : Fruits -> String
+fruitsToString fruit =
+    case fruit of
+        Apple ->
+            "Apple"
+
+        Banana ->
+            "Banana"
+
+        Grape ->
+            "Grape"
+
+
 type alias Model =
-    Int
+    { count : Int
+    , fruits : Fruits
+    }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( 0
+    ( { count = 0, fruits = Banana }
     , Cmd.none
     )
 
@@ -51,6 +72,7 @@ init _ =
 type Msg
     = NoOp
     | ClickedCheck
+    | SetFruits Fruits
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -60,7 +82,14 @@ update msg model =
             ( model, Cmd.none )
 
         ClickedCheck ->
-            ( model + 1, Cmd.none )
+            ( { model | count = model.count + 1 }
+            , Cmd.none
+            )
+
+        SetFruits newFruits ->
+            ( { model | fruits = newFruits }
+            , Cmd.none
+            )
 
 
 
@@ -98,7 +127,11 @@ viewContent model =
         []
         [ column
             [ columnWidth oneQuarter ]
-            [ Html.p [] [ Html.text <| "clicked: " ++ String.fromInt model ] ]
+            [ Html.p []
+                [ Html.text <| "clicked: " ++ String.fromInt model.count ]
+            , Html.p []
+                [ Html.text <| fruitsToString model.fruits ]
+            ]
         , column
             [{- auto -}]
             [ El.content []
@@ -117,12 +150,12 @@ viewContent model =
                     ]
                 )
             , Forms.field []
-                [ Forms.label [] [ Html.text "Name" ]
+                [ Forms.label [ size large ] [ Html.text "Name" ]
                 , Forms.control [ Style.loading ]
                     [ Forms.input
                         [ type_ "date"
                         , readonly True
-                        , color primary
+                        , size large
                         ]
                         []
                     ]
@@ -132,8 +165,26 @@ viewContent model =
                     [ Events.onClick ClickedCheck ]
                     [ Html.text "Send me a newsletter" ]
                 ]
+            , viewFruitsSwitcher
+                [ ( "Yellow", Banana )
+                , ( "Red", Apple )
+                , ( "Purple", Grape )
+                ]
             ]
         ]
+
+
+viewFruitsSwitcher : List ( String, Fruits ) -> Html Msg
+viewFruitsSwitcher pairs =
+    let
+        switcher ( colorName, fruits ) =
+            Forms.radio
+                [ Events.onClick <| SetFruits fruits
+                , name "fruits"
+                ]
+                [ Html.text colorName ]
+    in
+    Forms.control [] <| List.map switcher pairs
 
 
 viewBadges : List ( String, String ) -> List (Html msg)

@@ -6,6 +6,7 @@ module Capsule.Forms exposing
     , input
     , label
     , multilineFieldGroup
+    , radio
     , select
     , textarea
     , toControl
@@ -114,3 +115,17 @@ checkbox attributes children =
     Html.label
         [ class "checkbox" ]
         (underlying :: children)
+
+
+radio : Tagger msg
+radio attributes children =
+    let
+        underlying =
+            Html.input
+                ( type_ "radio" :: attributes )
+                []
+    in
+    Html.label
+        [ class "radio" ]
+        (underlying :: children)
+

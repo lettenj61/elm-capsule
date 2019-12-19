@@ -117,6 +117,26 @@ hasAddonsLeft =
     class "has-addons has-addons-left"
 
 
+hasAddonsCenter : Attribute msg
+hasAddonsCenter =
+    class "has-addons has-addons-centered"
+
+
+
+-- GROUPED IN POSITION
+
+
+groupedCenter : Attribute msg
+groupedCenter =
+    class "is-grouped-centered"
+
+
+groupedRight : Attribute msg
+groupedRight =
+    class "is-grouped-right"
+
+
+
 
 -- FLOAT MODIFIERS
 
