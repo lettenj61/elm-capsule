@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser exposing (Document)
+import Capsule.Components.Card as Card
 import Capsule.Columns exposing (column, columnWidth, columns, oneQuarter)
 import Capsule.Element as El
 import Capsule.Forms as Forms
@@ -131,6 +132,7 @@ viewContent model =
                 [ Html.text <| "clicked: " ++ String.fromInt model.count ]
             , Html.p []
                 [ Html.text <| fruitsToString model.fruits ]
+            , viewCard
             ]
         , column
             [{- auto -}]
@@ -151,7 +153,7 @@ viewContent model =
                 )
             , Forms.field []
                 [ Forms.label [ size large ] [ Html.text "Name" ]
-                , Forms.control [ Style.loading ]
+                , Forms.control [ size large, Style.loading ]
                     [ Forms.input
                         [ type_ "date"
                         , readonly True
@@ -160,10 +162,12 @@ viewContent model =
                         []
                     ]
                 ]
-            , Forms.control []
-                [ Forms.checkbox
-                    [ Events.onClick ClickedCheck ]
-                    [ Html.text "Send me a newsletter" ]
+            , Forms.field []
+                [ Forms.control []
+                    [ Forms.checkbox
+                        [ Events.onClick ClickedCheck ]
+                        [ Html.text "Send me a newsletter" ]
+                    ]
                 ]
             , viewFruitsSwitcher
                 [ ( "Yellow", Banana )
@@ -204,6 +208,21 @@ viewBadge left right =
             )
         |> Control.build
 
+
+viewCard : Html msg
+viewCard =
+    Card.card []
+        [ Card.cardHeader []
+            { title =
+                Card.cardHeaderTitle []
+                    [ Html.text "Growing life"]
+            , icon = Nothing
+            }
+        , Card.cardContent []
+            [ El.content []
+                [ Html.text "Stub" ]
+            ]
+        ]
 
 
 -- SUBSCRIPTIONS
