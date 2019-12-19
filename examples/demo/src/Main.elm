@@ -12,6 +12,7 @@ import Capsule.Types.Color exposing (dark, primary, success)
 import Capsule.Types.Size exposing (medium)
 import Html exposing (Html, text)
 import Html.Attributes as Attributes exposing (class, readonly, style, type_)
+import Html.Events as Events
 
 
 
@@ -33,12 +34,12 @@ main =
 
 
 type alias Model =
-    Maybe String
+    Int
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    ( Nothing
+    ( 0
     , Cmd.none
     )
 
@@ -49,6 +50,7 @@ init _ =
 
 type Msg
     = NoOp
+    | ClickedCheck
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -57,13 +59,16 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        ClickedCheck ->
+            ( model + 1, Cmd.none )
+
 
 
 -- VIEW
 
 
-view : Model -> Document msg
-view _ =
+view : Model -> Document Msg
+view model =
     { title = "Capsule"
     , body =
         [ viewHero
@@ -71,7 +76,7 @@ view _ =
             []
             [ Layout.fluidContainer
                 []
-                [ viewContent ]
+                [ viewContent model ]
             ]
         ]
     }
@@ -87,13 +92,13 @@ viewHero =
         ]
 
 
-viewContent : Html msg
-viewContent =
+viewContent : Model -> Html Msg
+viewContent model =
     columns
         []
         [ column
             [ columnWidth oneQuarter ]
-            [ Html.p [] [ Html.text "first" ] ]
+            [ Html.p [] [ Html.text <| "clicked: " ++ String.fromInt model ] ]
         , column
             [{- auto -}]
             [ El.content []
@@ -121,6 +126,11 @@ viewContent =
                         ]
                         []
                     ]
+                ]
+            , Forms.control []
+                [ Forms.checkbox
+                    [ Events.onClick ClickedCheck ]
+                    [ Html.text "Send me a newsletter" ]
                 ]
             ]
         ]

@@ -13,7 +13,7 @@ module Capsule.Forms exposing
 
 import Capsule.Html exposing (Tagger, withMixins)
 import Html exposing (Attribute, Html)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, type_)
 
 
 
@@ -94,14 +94,23 @@ textarea =
     Html.textarea |> withMixins [ class "textarea" ]
 
 
-checkbox : List (Attribute msg) -> Tagger msg
-checkbox innerAttributes attributes children =
+{-| A checkbox wrapped inside label element.
+
+    I left it as normal tag function because by default all the
+    events fired from overwrapping label seem to be propagated
+    onto underlying input.
+
+    Be warned that the label won't be modified by the attributes
+    that would be passed to this function.
+-}
+checkbox : Tagger msg
+checkbox attributes children =
     let
         underlying =
             Html.input
-                (class "checkbox" :: innerAttributes)
+                (class "checkbox" :: type_ "checkbox" :: attributes)
                 []
     in
-    label
-        attributes
+    Html.label
+        [ class "checkbox" ]
         (underlying :: children)
