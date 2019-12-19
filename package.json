@@ -1,8 +1,9 @@
 {
-  "name": "elm-capsules",
+  "name": "elm-capsule",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "make": "elm make --optimize --output=main.js src/Main.elm"
   }
 }
