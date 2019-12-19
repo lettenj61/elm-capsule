@@ -1,3 +1,23 @@
-# elm-capsule
+elm-capsule
+============
 
-Example project to integrate Elm with Bulma CSS framework.
+A package that helps Elm go well with Bulma.
+
+
+## Development
+
+**Build example site**:
+
+```sh
+$ cd ./examples/demo
+$ yarn make
+```
+
+Then open `examples/demo/index.html`.
+
+Note: you need to download `bulma.min.css` yourself.
+
+
+## License
+
+MIT.

@@ -1,11 +1,17 @@
 module Capsule.Style exposing
-    ( hasAddons
+    ( active
     , bold
     , clearfix
     , clipped
+    , expanded
     , fullwidth
+    , hasAddons
+    , hasAddonsLeft
+    , hasAddonsRight
     , hoverable
+    , hovered
     , invisible
+    , loading
     , marginless
     , narrow
     , overlay
@@ -17,7 +23,9 @@ module Capsule.Style exposing
     , rounded
     , shadowless
     , srOnly
+    , static
     , unselectable
+    , vertical
     )
 
 import Html exposing (Attribute)
@@ -34,7 +42,7 @@ rounded =
 
 
 
--- GRADIANT
+-- HERO GRADIANT
 
 
 bold : Attribute msg
@@ -65,6 +73,31 @@ hoverable =
     class "is-hoverable"
 
 
+static : Attribute msg
+static =
+    class "is-static"
+
+
+active : Attribute msg
+active =
+    class "is-active"
+
+
+hovered : Attribute msg
+hovered =
+    class "is-hovered"
+
+
+loading : Attribute msg
+loading =
+    class "is-loading"
+
+
+expanded : Attribute msg
+expanded =
+    class "is-expanded"
+
+
 
 -- HAS ADDONS
 
@@ -72,6 +105,16 @@ hoverable =
 hasAddons : Attribute msg
 hasAddons =
     class "has-addons"
+
+
+hasAddonsRight : Attribute msg
+hasAddonsRight =
+    class "has-addons has-addons-right"
+
+
+hasAddonsLeft : Attribute msg
+hasAddonsLeft =
+    class "has-addons has-addons-left"
 
 
 
@@ -149,3 +192,12 @@ srOnly =
 relative : Attribute msg
 relative =
     class "is-relative"
+
+
+
+-- TILE DIRECTION
+
+
+vertical : Attribute msg
+vertical =
+    class "is-vertical"

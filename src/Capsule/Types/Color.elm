@@ -1,4 +1,4 @@
-module Capsule.Color exposing (..)
+module Capsule.Types.Color exposing (..)
 
 -- COLORS
 

@@ -1,13 +1,18 @@
 module Capsule.Layout exposing
-    ( container
+    ( ancestorTile
+    , childTile
+    , container
     , defaultMedia
     , fluidContainer
+    , footer
     , fullheightHero
     , hero
     , level
     , levelItem
     , media
+    , parentTile
     , section
+    , tile
     , toContainer
     , toLevel
     , toLevelItem
@@ -146,3 +151,35 @@ fullheightHero attributes props =
         , Html.div [ class "hero-foot" ] props.foot
         ]
 
+
+
+-- FOOTER
+
+
+footer : Tagger msg
+footer =
+    Html.footer |> withMixins [ class "footer" ]
+
+
+
+-- TILES
+
+
+tile : Tagger msg
+tile =
+    Html.div |> withMixins [ class "tile" ]
+
+
+ancestorTile : Tagger msg
+ancestorTile =
+    Html.div |> withMixins [ class "tile", class "is-ancestor" ]
+
+
+parentTile : Tagger msg
+parentTile =
+    Html.div |> withMixins [ class "tile", class "is-parent" ]
+
+
+childTile : Tagger msg
+childTile =
+    Html.div |> withMixins [ class "tile", class "is-child" ]

@@ -2,11 +2,11 @@ module Capsule.Modifiers exposing
     ( backgroundColor
     , color
     , textColor
-    , sizeIs
+    , size
     )
 
-import Capsule.Color as Color exposing (Color)
-import Capsule.Size as Size exposing (Size)
+import Capsule.Types.Color as Color exposing (Color)
+import Capsule.Types.Size as Size exposing (Size)
 import Html exposing (Attribute)
 import Html.Attributes exposing (class)
 
@@ -30,6 +30,6 @@ textColor name =
     class <| "has-text-" ++ Color.toString name
 
 
-sizeIs : Size -> Attribute msg
-sizeIs name =
+size : Size -> Attribute msg
+size name =
     class <| "is-" ++ Size.toString name

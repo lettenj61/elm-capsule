@@ -1,10 +1,11 @@
-module Capsule.Breakpoint exposing
-    ( Breakpoint(..)
+module Capsule.Types.Breakpoint exposing
+    ( Breakpoint
     , desktop
     , fullHd
     , tablet
     , touch
     , widescreen
+    , toString
     )
 
 -- BREAKPOINTS
@@ -37,3 +38,8 @@ widescreen =
 fullHd : Breakpoint
 fullHd =
     Breakpoint "fullhd"
+
+
+toString : Breakpoint -> String
+toString (Breakpoint breakpoint) =
+    breakpoint

@@ -1,18 +1,17 @@
-module Capsule.Size exposing
+module Capsule.Types.Size exposing
     ( Size
-    , small
-    , medium
+    , fromInt
     , large
+    , medium
+    , small
     , toString
     )
-
-
 
 -- SIZES
 
 
-type Size =
-    Size String
+type Size
+    = Size String
 
 
 small : Size
@@ -28,6 +27,11 @@ medium =
 large : Size
 large =
     Size "large"
+
+
+fromInt : Int -> Size
+fromInt =
+    Size << String.fromInt
 
 
 toString : Size -> String

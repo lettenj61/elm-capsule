@@ -1,4 +1,4 @@
-module Capsule.Html.Internal exposing
+module Capsule.Html.Modifier exposing
     ( Modifier
     , addPrefix
     , addSuffix
