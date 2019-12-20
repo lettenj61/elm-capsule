@@ -97,12 +97,23 @@ textarea =
 
 {-| A checkbox wrapped inside label element.
 
-    I left it as normal tag function because by default all the
-    events fired from overwrapping label seem to be propagated
-    onto underlying input.
+I left it as normal tag function, because the events fired by
+underlying input would be propagated through overwrapping labels.
 
-    Be warned that the label won't be modified by the attributes
-    that would be passed to this function.
+Be warned that the label won't be modified by the attributes
+passed to this function as the first argument.
+
+    rememberMe =
+        checkbox
+            [ onClick RememberMe ]
+            [ "Remember me" ]
+
+renders to:
+
+    <label class="checkbox">
+        <input type="checkbox" onclick={RememberMe}>
+        Remember me
+    </label>
 -}
 checkbox : Tagger msg
 checkbox attributes children =
