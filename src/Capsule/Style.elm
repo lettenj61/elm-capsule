@@ -5,7 +5,10 @@ module Capsule.Style exposing
     , clipped
     , expanded
     , fullwidth
+    , groupedCenter
+    , groupedRight
     , hasAddons
+    , hasAddonsCenter
     , hasAddonsLeft
     , hasAddonsRight
     , hoverable
@@ -20,11 +23,13 @@ module Capsule.Style exposing
     , pulledRight
     , radiusless
     , relative
+    , right
     , rounded
     , shadowless
     , srOnly
     , static
     , unselectable
+    , up
     , vertical
     )
 
@@ -62,6 +67,20 @@ narrow =
 fullwidth : Attribute msg
 fullwidth =
     class "is-fullwidth"
+
+
+
+-- DIRECTION
+
+
+up : Attribute msg
+up =
+    class "is-up"
+
+
+right : Attribute msg
+right =
+    class "is-right"
 
 
 
@@ -134,7 +153,6 @@ groupedCenter =
 groupedRight : Attribute msg
 groupedRight =
     class "is-grouped-right"
-
 
 
 

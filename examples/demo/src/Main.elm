@@ -152,12 +152,11 @@ viewContent model =
                     ]
                 )
             , Forms.field []
-                [ Forms.label [ size large ] [ Html.text "Name" ]
-                , Forms.control [ size large, Style.loading ]
+                [ Forms.label [] [ Html.text "Name" ]
+                , Forms.control [ Style.loading ]
                     [ Forms.input
-                        [ type_ "date"
+                        [ type_ "text"
                         , readonly True
-                        , size large
                         ]
                         []
                     ]
@@ -188,7 +187,9 @@ viewFruitsSwitcher pairs =
                 ]
                 [ Html.text colorName ]
     in
-    Forms.control [] <| List.map switcher pairs
+    Forms.field []
+        [ Forms.control [] <| List.map switcher pairs
+        ]
 
 
 viewBadges : List ( String, String ) -> List (Html msg)
