@@ -165,7 +165,7 @@ viewContent model =
                 [ Forms.control []
                     [ Forms.checkbox
                         [ Events.onClick ClickedCheck ]
-                        [ Html.text "Send me a newsletter" ]
+                        [ Html.text " Send me a newsletter" ]
                     ]
                 ]
             , viewFruitsSwitcher

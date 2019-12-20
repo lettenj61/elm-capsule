@@ -13,7 +13,7 @@ module Capsule.Forms exposing
     )
 
 import Capsule.Html exposing (Tagger, withMixins)
-import Html exposing (Attribute, Html)
+import Html
 import Html.Attributes exposing (class, type_)
 
 
@@ -109,7 +109,7 @@ checkbox attributes children =
     let
         underlying =
             Html.input
-                (class "checkbox" :: type_ "checkbox" :: attributes)
+                (type_ "checkbox" :: attributes)
                 []
     in
     Html.label
