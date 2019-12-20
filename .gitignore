@@ -1,8 +1,8 @@
 ### Elm
 
 elm.html
-examples/demo/main.js
-examples/demo/bulma.min.css
+examples/main.js
+examples/bulma.min.css
 
 # elm-package generated files
 elm-stuff

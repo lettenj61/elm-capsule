@@ -9,11 +9,11 @@ A package that helps Elm go well with Bulma.
 **Build example site**:
 
 ```sh
-$ cd ./examples/demo
+$ cd ./examples
 $ yarn make
 ```
 
-Then open `examples/demo/index.html`.
+Then open `examples/index.html`.
 
 Note: you need to download `bulma.min.css` yourself.
 
