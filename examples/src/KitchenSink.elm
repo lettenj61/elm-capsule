@@ -2,12 +2,12 @@ module KitchenSink exposing (main)
 
 import Browser
 import Capsule.Components.Navbar as Navbar exposing (defaultNavbarMenu)
-import Capsule.Columns as Column
+import Capsule.Columns as Column exposing (column, columns, columnWidth, half )
 import Capsule.Element as El
 import Capsule.Layout as Layout
 import Capsule.Modifiers exposing (color)
 import Capsule.Style as Style
-import Capsule.Types.Color as Color
+import Capsule.Types.Color as Color exposing (Color)
 import Html exposing (Attribute, Html)
 import Html.Attributes as Attributes
 import Html.Events as Events
@@ -43,6 +43,21 @@ init =
     Nothing
 
 
+examples : List ( String, Example )
+examples =
+    [ ( "Typography", Typography )
+    ]
+
+
+basicColorMap : List ( String, Color )
+basicColorMap =
+    [ ( "Primary", Color.primary )
+    , ( "Info", Color.info )
+    , ( "Success", Color.success )
+    , ( "Warning", Color.warning )
+    , ( "Danger", Color.danger ) 
+    ]
+
 
 -- UPDATE
 
@@ -71,9 +86,10 @@ type alias Detail msg =
 
 view : Model -> Html Msg
 view _ =
-    Html.div []
+    Html.div [] <|
         [ viewNavbar
         ]
+        ++ (viewFromDetail viewButtonExample)
 
 
 viewNavbar : Html msg
@@ -105,6 +121,24 @@ viewFromDetail { title, subtitle, content } =
         ++ content
     ]
 
+
+viewButtonExample : Detail msg
+viewButtonExample =
+    let
+        toButton ( el, colorName ) =
+            El.button
+                [ color colorName ]
+                [ Html.text el ]
+
+        body =
+            columns []
+                [ column [ columnWidth half ]
+                    [ El.buttons []
+                        (List.map toButton basicColorMap)
+                    ]
+                ]
+    in
+    { title = "Button", subtitle = Nothing, content = [ body ] }
 
 
 -- SUBSCRIPTIONS

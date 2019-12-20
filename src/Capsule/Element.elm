@@ -2,6 +2,7 @@ module Capsule.Element exposing
     ( box
     , button
     , buttonAnchor
+    , buttons
     , content
     , deleteAnchor
     , deleteButton
@@ -44,6 +45,11 @@ button =
 buttonAnchor : Tagger msg
 buttonAnchor =
     Html.a |> withMixins [ class "button" ]
+
+
+buttons : Tagger msg
+buttons =
+    Html.div |> withMixins [ class "buttons" ]
 
 
 content : Tagger msg
