@@ -1,8 +1,9 @@
 module KitchenSink exposing (main)
 
 import Browser
-import Capsule.Components.Navbar as Navbar exposing (defaultNavbarMenu)
-import Capsule.Columns as Column exposing (column, columns, columnWidth, half )
+import Capsule.Columns as Column exposing (column, columnWidth, columns, half)
+import Capsule.Components.Navbar exposing (..)
+import Capsule.Components.Tabs exposing (tabs)
 import Capsule.Element as El
 import Capsule.Layout as Layout
 import Capsule.Modifiers exposing (color)
@@ -36,6 +37,7 @@ type alias Model =
 
 type Example
     = Typography
+    | Button
 
 
 init : Model
@@ -46,6 +48,7 @@ init =
 examples : List ( String, Example )
 examples =
     [ ( "Typography", Typography )
+    , ( "Button", Button )
     ]
 
 
@@ -55,22 +58,24 @@ basicColorMap =
     , ( "Info", Color.info )
     , ( "Success", Color.success )
     , ( "Warning", Color.warning )
-    , ( "Danger", Color.danger ) 
+    , ( "Danger", Color.danger )
+    , ( "Dark", Color.dark )
+    , ( "Light", Color.light )
+    , ( "Link", Color.link )
     ]
+
 
 
 -- UPDATE
 
 
 type Msg
-    = NoOp
+    = Route Example
 
 
 update : Msg -> Model -> Model
-update msg model =
-    case msg of
-        NoOp ->
-            model
+update (Route ex) =
+    always (Just ex)
 
 
 
@@ -85,60 +90,111 @@ type alias Detail msg =
 
 
 view : Model -> Html Msg
-view _ =
+view model =
+    let
+        detail =
+            case model of
+                Just ex ->
+                    route ex
+
+                Nothing ->
+                    Detail "" Nothing []
+    in
     Html.div [] <|
-        [ viewNavbar
-        ]
-        ++ (viewFromDetail viewButtonExample)
+        viewNavbar :: viewTabs :: viewFromDetail detail
 
 
 viewNavbar : Html msg
 viewNavbar =
-    Navbar.navbar [ color Color.dark ]
-        [ Navbar.navbarBrand []
-            [ Navbar.navbarItem
-                []
-                [ Html.span [] [ Html.text "Elm Capsule" ] ]
-            , Navbar.navbarBurger []
+    navbar [ color Color.dark ]
+        [ navbarBrand []
+            [ navbarItem []
+                [ Html.span
+                    [ Attributes.style "font-weight" "600" ]
+                    [ Html.text "Elm Capsule" ]
+                ]
+            , navbarBurger []
             ]
-        , Navbar.navbarMenu [ Style.active ]
+        , navbarMenu [ Style.active ]
             { defaultNavbarMenu
                 | start =
-                    [ Navbar.navbarItemAnchor [] [ Html.text "Menu" ]
+                    [ navbarItemAnchor [] [ Html.text "Menu" ]
                     ]
             }
         ]
 
 
+viewTabs : Html Msg
+viewTabs =
+    tabs []
+        [ Html.ul [] <|
+            List.map
+                (\( labelString, ex ) ->
+                    Html.li []
+                        [ Html.a
+                            [ Route ex |> Events.onClick ]
+                            [ Html.text labelString ]
+                        ]
+                )
+                examples
+        ]
+
+
 viewFromDetail : Detail msg -> List (Html msg)
 viewFromDetail { title, subtitle, content } =
+    let
+        viewSubtitle =
+            subtitle
+                |> Maybe.map
+                    (\val ->
+                        El.subtitle [] [ Html.text val ]
+                    )
+                |> Maybe.withDefault (Html.text "")
+    in
     [ Layout.hero [] <|
-        [ El.title [] [ Html.text title ]
-        , subtitle
-            |> Maybe.map (\val -> El.subtitle [] [ Html.text val ])
-            |> Maybe.withDefault (Html.text "")
-        ]
-        ++ content
+        List.concat
+            [ [ El.title [] [ Html.text title ], viewSubtitle ]
+            , content
+            ]
     ]
+
+
+viewTypographyExample : Detail msg
+viewTypographyExample =
+    Detail "Typography" Nothing []
 
 
 viewButtonExample : Detail msg
 viewButtonExample =
     let
-        toButton ( el, colorName ) =
+        toButton mods ( el, colorName ) =
             El.button
-                [ color colorName ]
+                (color colorName :: mods)
                 [ Html.text el ]
+
+        pairsToHtml mods pairs =
+            List.map (\pair -> toButton mods pair) pairs
 
         body =
             columns []
                 [ column [ columnWidth half ]
-                    [ El.buttons []
-                        (List.map toButton basicColorMap)
+                    [ El.buttons [] <| pairsToHtml [] basicColorMap
+                    , El.buttons [] <| pairsToHtml [ Style.rounded ] basicColorMap
                     ]
                 ]
     in
     { title = "Button", subtitle = Nothing, content = [ body ] }
+
+
+route : Example -> Detail msg
+route ex =
+    case ex of
+        Typography ->
+            viewTypographyExample
+
+        Button ->
+            viewButtonExample
+
 
 
 -- SUBSCRIPTIONS

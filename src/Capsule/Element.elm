@@ -8,7 +8,8 @@ module Capsule.Element exposing
     , deleteButton
     , deleteTag
     , icon
-    , image
+    , imageFigure
+    , linkAnchor
     , notification
     , progress
     , subtitle
@@ -45,6 +46,11 @@ button =
 buttonAnchor : Tagger msg
 buttonAnchor =
     Html.a |> withMixins [ class "button" ]
+
+
+linkAnchor : Tagger msg
+linkAnchor =
+    Html.a |> withMixins [ class "link" ]
 
 
 buttons : Tagger msg
@@ -92,8 +98,8 @@ icon attributes iconClass =
             [ img [ src "my-picture.png" ] [] ]
 
 -}
-image : Tagger msg
-image =
+imageFigure : Tagger msg
+imageFigure =
     toImage Html.figure
 
 
