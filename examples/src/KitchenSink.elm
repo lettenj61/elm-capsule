@@ -3,6 +3,7 @@ module KitchenSink exposing (main)
 import Browser
 import Capsule.Columns exposing (column, columnWidth, columns, half)
 import Capsule.Components.Message exposing (..)
+import Capsule.Components.Modal exposing (..)
 import Capsule.Components.Navbar exposing (..)
 import Capsule.Components.Tabs exposing (tabs)
 import Capsule.Element as El
@@ -36,7 +37,14 @@ main =
 
 
 type alias Model =
-    Maybe Example
+    { example : Maybe Example
+    , widget : Widget
+    }
+
+
+type alias Widget =
+    { showModal : Bool
+    }
 
 
 type Example
@@ -45,11 +53,12 @@ type Example
     | Button
     | Tags
     | Message
+    | Modal
 
 
 init : Model
 init =
-    Just Welcome
+    Model (Just Welcome) (Widget False)
 
 
 examples : List ( String, Example )
@@ -58,6 +67,7 @@ examples =
     , ( "Button", Button )
     , ( "Tags", Tags )
     , ( "Message", Message )
+    , ( "Modal", Modal )
     ]
 
 
@@ -89,11 +99,21 @@ basicSizes =
 
 type Msg
     = Route Example
+    | ToggleModal
 
 
 update : Msg -> Model -> Model
-update (Route ex) =
-    always (Just ex)
+update msg model =
+    case msg of
+        Route ex ->
+            { model | example = Just ex }
+        
+        ToggleModal ->
+            { example = model.example
+            , widget =
+                { showModal = not model.widget.showModal
+                }
+            }
 
 
 
@@ -111,12 +131,12 @@ view : Model -> Html Msg
 view model =
     let
         detail =
-            case model of
+            case model.example of
                 Just ex ->
-                    route ex
+                    route ex model.widget
 
                 Nothing ->
-                    Detail "" Nothing []
+                    route Welcome model.widget
 
         cdnLink =
             Html.node "link"
@@ -288,6 +308,38 @@ viewMessageExample =
     }
 
 
+viewModalExample : Widget -> Detail Msg
+viewModalExample { showModal } =
+    { title = "Modal"
+    , subtitle = Just "Your humble pop-up"
+    , content =
+        [ El.box [ Style.centered ]
+            [ El.button
+                [ Events.onClick ToggleModal
+                , color Color.info
+                , size Size.large
+                ]
+                [ Html.text "Show/Hide" ]
+            ]
+        , viewModal showModal
+        ]
+    }
+
+
+
+viewModal : Bool -> Html Msg
+viewModal showModal =
+    modal
+        [ if showModal then Style.active else Attributes.class "" ]
+        [ modalBackground [ Events.onClick ToggleModal ] []
+        , modalContent []
+            [ El.notification [ color Color.success ]
+                [ Html.text "inside a modal!" ]
+            ]
+        , modalClose [ Events.onClick ToggleModal ]
+        ]
+
+
 columnSettings : Attribute msg
 columnSettings =
     Responsive.columnSet
@@ -295,8 +347,8 @@ columnSettings =
         ]
 
 
-route : Example -> Detail msg
-route ex =
+route : Example -> Widget -> Detail Msg
+route ex widget =
     case ex of
         Welcome ->
             Detail "Welcome" (Just "Select samples from menu above!") []
@@ -312,3 +364,6 @@ route ex =
 
         Message ->
             viewMessageExample
+
+        Modal ->
+            viewModalExample widget

@@ -41,12 +41,12 @@ cardFooter =
 
 cardFooterItem : Tagger msg
 cardFooterItem =
-    Html.p |> withMixins [ class "cardFooterItem" ]
+    Html.p |> withMixins [ class "card-footer-item" ]
 
 
 cardFooterLink : Tagger msg
 cardFooterLink =
-    Html.a |> withMixins [ class "cardFooterItem" ]
+    Html.a |> withMixins [ class "card-footer-item" ]
 
 
 
