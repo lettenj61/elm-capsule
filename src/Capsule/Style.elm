@@ -1,6 +1,8 @@
 module Capsule.Style exposing
     ( active
     , bold
+    , boxed
+    , centered
     , clearfix
     , clipped
     , expanded
@@ -30,6 +32,8 @@ module Capsule.Style exposing
     , shadowless
     , srOnly
     , static
+    , toggle
+    , toggleRounded
     , unselectable
     , up
     , vertical
@@ -90,7 +94,12 @@ fullwidth =
 
 
 
--- DIRECTION
+-- POSITION AND DIRECTION
+
+
+centered : Attribute msg
+centered =
+    class "is-centered"
 
 
 up : Attribute msg
@@ -259,3 +268,22 @@ relative =
 vertical : Attribute msg
 vertical =
     class "is-vertical"
+
+
+
+-- TAB SHAPE
+
+
+boxed : Attribute msg
+boxed =
+    class "is-boxed"
+
+
+toggle : Attribute msg
+toggle =
+    class "is-toggle"
+
+
+toggleRounded : Attribute msg
+toggleRounded =
+    class "is-toggle is-toggle-rounded"

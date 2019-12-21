@@ -1,14 +1,14 @@
 module Capsule.Responsive exposing
-    ( columnWidth
+    ( columnSet
+    , columnWidth
     , size
     )
 
+import Capsule.Columns exposing (ColumnWidth, columnWidthToString)
+import Capsule.Html.Modifier as Modifier exposing (Modifier, toClass, toClassList)
 import Capsule.Types.Breakpoint as Breakpoint exposing (Breakpoint)
 import Capsule.Types.Size as Size exposing (Size)
-import Capsule.Columns exposing (ColumnWidth, columnWidthToString)
-import Capsule.Html.Modifier as Modifier exposing (Modifier, toClass)
 import Html exposing (Attribute)
-import Html.Attributes exposing (class)
 
 
 
@@ -16,12 +16,17 @@ import Html.Attributes exposing (class)
 
 
 atBreakpoint : Breakpoint -> Modifier -> Attribute msg
-atBreakpoint break modifier =
+atBreakpoint breakpoint =
+    toClass << atBreakpointToken breakpoint
+
+
+atBreakpointToken : Breakpoint -> Modifier -> Modifier
+atBreakpointToken break modifier =
     let
         suffix =
             "-" ++ Breakpoint.toString break
     in
-    toClass <| Modifier.addSuffix suffix modifier
+    Modifier.addSuffix suffix modifier
 
 
 
@@ -35,6 +40,18 @@ columnWidth width break =
         |> atBreakpoint break
 
 
+columnSet : List ( ColumnWidth, Breakpoint ) -> Attribute msg
+columnSet settings =
+    settings
+        |> List.map
+            (\( width, break ) ->
+                atBreakpointToken
+                    break
+                    (Modifier.fromString <| columnWidthToString <| width)
+            )
+        |> toClassList
+
+
 
 -- SIZE
 
@@ -44,4 +61,3 @@ size val break =
     Size.toString val
         |> Modifier.fromString
         |> atBreakpoint break
-

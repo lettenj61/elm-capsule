@@ -1,4 +1,4 @@
-elm-capsule
+Aelm-capsule
 ============
 
 A package that helps Elm go well with Bulma.
@@ -6,7 +6,9 @@ A package that helps Elm go well with Bulma.
 
 ## Development
 
-**Build example site**:
+There are 2 ways to build and preview kitchen sink demo app.
+
+### 1. Build it static
 
 ```sh
 $ cd ./examples
@@ -15,7 +17,16 @@ $ yarn make
 
 Then open `examples/index.html`.
 
-Note: you need to download `bulma.min.css` yourself.
+### 2. Via `elm reactor`
+
+```
+$ cd ./examples
+$ elm reactor
+```
+
+Then visit localhost.
+
+
 
 
 ## License

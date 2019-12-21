@@ -2,6 +2,7 @@ module KitchenSink exposing (main)
 
 import Browser
 import Capsule.Columns exposing (column, columnWidth, columns, half)
+import Capsule.Components.Message exposing (..)
 import Capsule.Components.Navbar exposing (..)
 import Capsule.Components.Tabs exposing (tabs)
 import Capsule.Element as El
@@ -43,6 +44,7 @@ type Example
     | Typography
     | Button
     | Tags
+    | Message
 
 
 init : Model
@@ -55,11 +57,12 @@ examples =
     [ ( "Typography", Typography )
     , ( "Button", Button )
     , ( "Tags", Tags )
+    , ( "Message", Message )
     ]
 
 
-basicColorMap : List ( String, Color )
-basicColorMap =
+basicColors : List ( String, Color )
+basicColors =
     [ ( "Primary", Color.primary )
     , ( "Info", Color.info )
     , ( "Success", Color.success )
@@ -149,7 +152,7 @@ viewNavbar =
 
 viewTabs : Html Msg
 viewTabs =
-    tabs []
+    tabs [ Style.marginless ]
         [ Html.ul [] <|
             List.map
                 (\( labelString, ex ) ->
@@ -213,13 +216,13 @@ viewButtonExample =
 
         body =
             columns []
-                [ column [ Responsive.columnWidth half Breakpoint.desktop ]
+                [ column [ columnSettings ]
                     [ sectionTitle "Colors"
-                    , El.buttons [] <| pairsToHtml [] basicColorMap
+                    , El.buttons [] <| pairsToHtml [] basicColors
                     , sectionTitle "Colors: light mode"
-                    , El.buttons [] <| pairsToHtml [ Style.light ] basicColorMap
+                    , El.buttons [] <| pairsToHtml [ Style.light ] basicColors
                     , sectionTitle "Rounded"
-                    , El.buttons [] <| pairsToHtml [ Style.rounded ] basicColorMap
+                    , El.buttons [] <| pairsToHtml [ Style.rounded ] basicColors
                     , sectionTitle "Sizes"
                     , El.buttons [] <|
                         List.map
@@ -244,9 +247,9 @@ viewTagsExample =
 
         exampleCols =
             columns []
-                [ column [ Responsive.columnWidth half Breakpoint.desktop ]
+                [ column [ columnSettings ]
                     [ El.tags [] <|
-                        List.map toTag basicColorMap
+                        List.map toTag basicColors
                     ]
                 ]
     in
@@ -254,6 +257,42 @@ viewTagsExample =
     , subtitle = Just "Small, versatile, informative chip"
     , content = [ exampleCols ]
     }
+
+
+viewMessageExample : Detail msg
+viewMessageExample =
+    let
+        toLorem term =
+            String.toLower term
+                |> List.repeat 8
+                |> String.join " .. "
+
+        messageCard ( text, colorName ) =
+            message [ color colorName ]
+                [ messageHeader []
+                    [ Html.p [] [ Html.text text ]
+                    , El.deleteButton []
+                    ]
+                , messageBody []
+                    [ Html.text <| toLorem text ]
+                ]
+    in
+    { title = "Message"
+    , subtitle = Just "Important notice to remember"
+    , content =
+        [ columns []
+            [ column [ columnSettings ] <|
+                List.map messageCard basicColors
+            ]
+        ]
+    }
+
+
+columnSettings : Attribute msg
+columnSettings =
+    Responsive.columnSet
+        [ ( half, Breakpoint.desktop )
+        ]
 
 
 route : Example -> Detail msg
@@ -270,3 +309,6 @@ route ex =
         
         Tags ->
             viewTagsExample
+
+        Message ->
+            viewMessageExample

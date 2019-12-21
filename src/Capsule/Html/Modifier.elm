@@ -35,6 +35,13 @@ toClass (Modifier token) =
     Attributes.class token
 
 
-toClassList : List Modifier -> List (Attribute msg)
-toClassList =
-    List.map toClass
+toClassList : List Modifier -> Attribute msg
+toClassList tokens =
+    tokens
+        |> List.map (\tok -> ( toString tok, True ))
+        |> Attributes.classList
+
+
+toString : Modifier -> String
+toString (Modifier token) =
+    token
