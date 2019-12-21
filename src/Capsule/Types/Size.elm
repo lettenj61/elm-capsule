@@ -3,6 +3,7 @@ module Capsule.Types.Size exposing
     , fromInt
     , large
     , medium
+    , normal
     , small
     , toString
     )
@@ -22,6 +23,11 @@ small =
 medium : Size
 medium =
     Size "medium"
+
+
+normal : Size
+normal =
+    Size "normal"
 
 
 large : Size

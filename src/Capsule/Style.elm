@@ -4,6 +4,7 @@ module Capsule.Style exposing
     , clearfix
     , clipped
     , expanded
+    , fullheightWithNavbar
     , fullwidth
     , groupedCenter
     , groupedRight
@@ -14,6 +15,7 @@ module Capsule.Style exposing
     , hoverable
     , hovered
     , invisible
+    , light
     , loading
     , marginless
     , narrow
@@ -53,6 +55,24 @@ rounded =
 bold : Attribute msg
 bold =
     class "is-bold"
+
+
+
+-- HERO HEIGHT
+
+
+fullheightWithNavbar : Attribute msg
+fullheightWithNavbar =
+    class "is-fullheight-with-navbar"
+
+
+
+-- DARK AND LIGHT
+
+
+light : Attribute msg
+light =
+    class "is-light"
 
 
 

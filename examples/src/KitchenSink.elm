@@ -1,14 +1,17 @@
 module KitchenSink exposing (main)
 
 import Browser
-import Capsule.Columns as Column exposing (column, columnWidth, columns, half)
+import Capsule.Columns exposing (column, columnWidth, columns, half)
 import Capsule.Components.Navbar exposing (..)
 import Capsule.Components.Tabs exposing (tabs)
 import Capsule.Element as El
 import Capsule.Layout as Layout
-import Capsule.Modifiers exposing (color)
+import Capsule.Modifiers exposing (color, size)
+import Capsule.Responsive as Responsive
 import Capsule.Style as Style
+import Capsule.Types.Breakpoint as Breakpoint
 import Capsule.Types.Color as Color exposing (Color)
+import Capsule.Types.Size as Size exposing (Size)
 import Html exposing (Attribute, Html)
 import Html.Attributes as Attributes
 import Html.Events as Events
@@ -36,19 +39,22 @@ type alias Model =
 
 
 type Example
-    = Typography
+    = Welcome
+    | Typography
     | Button
+    | Tags
 
 
 init : Model
 init =
-    Nothing
+    Just Welcome
 
 
 examples : List ( String, Example )
 examples =
     [ ( "Typography", Typography )
     , ( "Button", Button )
+    , ( "Tags", Tags )
     ]
 
 
@@ -62,6 +68,15 @@ basicColorMap =
     , ( "Dark", Color.dark )
     , ( "Light", Color.light )
     , ( "Link", Color.link )
+    ]
+
+
+basicSizes : List ( String, Size )
+basicSizes =
+    [ ( "Normal", Size.normal )
+    , ( "Small", Size.small )
+    , ( "Medium", Size.medium )
+    , ( "Large", Size.large )
     ]
 
 
@@ -99,28 +114,36 @@ view model =
 
                 Nothing ->
                     Detail "" Nothing []
+
+        cdnLink =
+            Html.node "link"
+                [ Attributes.rel "stylesheet"
+                , Attributes.href "https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"
+                , Attributes.attribute "integrity" "sha256-D9M5yrVDqFlla7nlELDaYZIpXfFWDytQtiV+TaH6F1I="
+                , Attributes.attribute "crossorigin" "anonymous"
+                ]
+                []
     in
     Html.div [] <|
-        viewNavbar :: viewTabs :: viewFromDetail detail
+        [ cdnLink
+        , viewNavbar
+        , viewTabs
+        ]
+        ++ viewFromDetail detail
 
 
-viewNavbar : Html msg
+viewNavbar : Html Msg
 viewNavbar =
     navbar [ color Color.dark ]
         [ navbarBrand []
-            [ navbarItem []
-                [ Html.span
-                    [ Attributes.style "font-weight" "600" ]
-                    [ Html.text "Elm Capsule" ]
+            [ navbarItemAnchor
+                [ Events.onClick <| Route Welcome
                 ]
+                [ Html.text "Elm Capsule" ]
             , navbarBurger []
             ]
-        , navbarMenu [ Style.active ]
-            { defaultNavbarMenu
-                | start =
-                    [ navbarItemAnchor [] [ Html.text "Menu" ]
-                    ]
-            }
+        , navbarMenu []
+            defaultNavbarMenu
         ]
 
 
@@ -150,13 +173,21 @@ viewFromDetail { title, subtitle, content } =
                         El.subtitle [] [ Html.text val ]
                     )
                 |> Maybe.withDefault (Html.text "")
-    in
-    [ Layout.hero [] <|
-        List.concat
-            [ [ El.title [] [ Html.text title ], viewSubtitle ]
-            , content
+
+        viewDescription =
+            [ El.title [] [ Html.text title ]
+            , viewSubtitle
             ]
-    ]
+        
+        viewDetailWrap =
+            Layout.section []
+                [ Layout.fluidContainer []
+                    content
+                ]
+    in
+    [ Layout.hero [ color Color.light ] viewDescription
+    , viewDetailWrap
+    ] 
 
 
 viewTypographyExample : Detail msg
@@ -167,39 +198,75 @@ viewTypographyExample =
 viewButtonExample : Detail msg
 viewButtonExample =
     let
-        toButton mods ( el, colorName ) =
+        coloredButton mods ( el, colorName ) =
             El.button
                 (color colorName :: mods)
                 [ Html.text el ]
 
         pairsToHtml mods pairs =
-            List.map (\pair -> toButton mods pair) pairs
+            List.map
+                (\pair -> coloredButton mods pair)
+                pairs
+
+        sectionTitle titleString =
+            El.subtitle [ size <| Size.fromInt 5 ] [ Html.text titleString ]
 
         body =
             columns []
-                [ column [ columnWidth half ]
-                    [ El.buttons [] <| pairsToHtml [] basicColorMap
+                [ column [ Responsive.columnWidth half Breakpoint.desktop ]
+                    [ sectionTitle "Colors"
+                    , El.buttons [] <| pairsToHtml [] basicColorMap
+                    , sectionTitle "Colors: light mode"
+                    , El.buttons [] <| pairsToHtml [ Style.light ] basicColorMap
+                    , sectionTitle "Rounded"
                     , El.buttons [] <| pairsToHtml [ Style.rounded ] basicColorMap
+                    , sectionTitle "Sizes"
+                    , El.buttons [] <|
+                        List.map
+                            (\( text, val ) ->
+                                El.button [ size val ] [ Html.text text ]
+                            )
+                            basicSizes
                     ]
                 ]
     in
-    { title = "Button", subtitle = Nothing, content = [ body ] }
+    { title = "Button"
+    , subtitle = Just "Common buttons with styles"
+    , content = [ body ]
+    }
+
+
+viewTagsExample : Detail msg
+viewTagsExample =
+    let
+        toTag ( text, colorName ) =
+            El.tag [ color colorName ] [ Html.text text ]
+
+        exampleCols =
+            columns []
+                [ column [ Responsive.columnWidth half Breakpoint.desktop ]
+                    [ El.tags [] <|
+                        List.map toTag basicColorMap
+                    ]
+                ]
+    in
+    { title = "Tags"
+    , subtitle = Just "Small, versatile, informative chip"
+    , content = [ exampleCols ]
+    }
 
 
 route : Example -> Detail msg
 route ex =
     case ex of
+        Welcome ->
+            Detail "Welcome" (Just "Select samples from menu above!") []
+
         Typography ->
             viewTypographyExample
 
         Button ->
             viewButtonExample
-
-
-
--- SUBSCRIPTIONS
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
+        
+        Tags ->
+            viewTagsExample

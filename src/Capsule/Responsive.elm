@@ -8,6 +8,7 @@ import Capsule.Types.Size as Size exposing (Size)
 import Capsule.Columns exposing (ColumnWidth, columnWidthToString)
 import Capsule.Html.Modifier as Modifier exposing (Modifier, toClass)
 import Html exposing (Attribute)
+import Html.Attributes exposing (class)
 
 
 

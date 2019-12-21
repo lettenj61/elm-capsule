@@ -31,5 +31,5 @@ textColor name =
 
 
 size : Size -> Attribute msg
-size name =
-    class <| "is-" ++ Size.toString name
+size val =
+    class <| "is-" ++ Size.toString val
