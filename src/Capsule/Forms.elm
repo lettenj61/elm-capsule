@@ -2,7 +2,9 @@ module Capsule.Forms exposing
     ( checkbox
     , control
     , field
+    , fieldBody
     , fieldGroup
+    , fieldLabel
     , input
     , label
     , multilineFieldGroup
@@ -114,6 +116,7 @@ renders to:
         <input type="checkbox" onclick={RememberMe}>
         Remember me
     </label>
+
 -}
 checkbox : Tagger msg
 checkbox attributes children =
@@ -133,10 +136,23 @@ radio attributes children =
     let
         underlying =
             Html.input
-                ( type_ "radio" :: attributes )
+                (type_ "radio" :: attributes)
                 []
     in
     Html.label
         [ class "radio" ]
         (underlying :: children)
 
+
+
+-- HORIZONTAL FIELD
+
+
+fieldLabel : Tagger msg
+fieldLabel =
+    Html.div |> withMixins [ class "field-label" ]
+
+
+fieldBody : Tagger msg
+fieldBody =
+    Html.div |> withMixins [ class "field-body" ]
