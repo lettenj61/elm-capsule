@@ -108,7 +108,7 @@ passed to this function as the first argument.
     rememberMe =
         checkbox
             [ onClick RememberMe ]
-            [ "Remember me" ]
+            [ text "Remember me" ]
 
 renders to:
 
