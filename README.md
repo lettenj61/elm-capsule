@@ -6,27 +6,17 @@ A package that helps Elm go well with Bulma.
 
 ## Development
 
-There are 2 ways to build and preview kitchen sink demo app.
+First, grab fresh copy of `bulma.min.css` and save it under `examples/src`.
 
-### 1. Build it static
-
-```sh
-$ cd ./examples
-$ yarn make
-```
-
-Then open `examples/index.html`.
-
-### 2. Via `elm reactor`
+Then:
 
 ```
 $ cd ./examples
-$ elm reactor
+$ yarn
+$ yarn dev
 ```
 
-Then visit localhost.
-
-
+And development server starts on `localhost:8000`, powered by `parceljs`.
 
 
 ## License
