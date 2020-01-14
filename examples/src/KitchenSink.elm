@@ -3,6 +3,7 @@ module KitchenSink exposing (main)
 import Browser
 import Capsule.Columns exposing (column, columnWidth, columns, half)
 import Capsule.Components.Breadcrumb exposing (..)
+import Capsule.Components.Menu exposing (..)
 import Capsule.Components.Message exposing (..)
 import Capsule.Components.Modal exposing (..)
 import Capsule.Components.Navbar exposing (..)
@@ -110,9 +111,7 @@ update msg model =
             { model | example = Just ex }
         
         ToggleModal ->
-            { example = model.example
-            , showModal = not model.showModal
-            }
+            { model | showModal = not model.showModal }
 
 
 
@@ -140,7 +139,7 @@ view model =
     in
     Html.div [] <|
         [ viewNavbar
-        , viewTabs
+        , viewTabs model
         ]
         ++ viewFromDetail detail
 
@@ -161,13 +160,22 @@ viewNavbar =
         ]
 
 
-viewTabs : Html Msg
-viewTabs =
-    tabs [ Style.marginless ]
+viewTabs : Model -> Html Msg
+viewTabs { example } =
+    tabs
+        [ Style.marginless ]
         [ Html.ul [] <|
             List.map
                 (\( labelString, ex ) ->
-                    Html.li []
+                    let
+                        activeState =
+                            if Just ex == example then
+                                Style.active
+                            else
+                                Attributes.class ""
+                    in
+                    Html.li
+                        [ activeState ]
                         [ Html.a
                             [ Route ex |> Events.onClick ]
                             [ Html.text labelString ]
@@ -225,6 +233,12 @@ viewButtonExample =
         sectionTitle titleString =
             El.subtitle [ size <| Size.fromInt 5 ] [ Html.text titleString ]
 
+        buttonStateRow text state =
+            Html.tr []
+                [ Html.td [] [ Html.text text ]
+                , Html.td [] [ El.button [ state, color Color.success ] [ Html.text text ] ]
+                ]
+
         body =
             columns []
                 [ column [ columnSettings ]
@@ -241,6 +255,17 @@ viewButtonExample =
                                 El.button [ size val ] [ Html.text text ]
                             )
                             basicSizes
+                    , sectionTitle "State"
+                    , El.table
+                        []
+                        [ Html.thead [] []
+                        , Html.tbody
+                            []
+                            [ buttonStateRow "loading" Style.loading
+                            , buttonStateRow "focused" Style.focused
+                            , buttonStateRow "hovered" Style.hovered
+                            ]
+                        ]
                     ]
                 ]
     in
@@ -351,7 +376,7 @@ viewModal : Bool -> Html Msg
 viewModal showModal =
     modal
         [ if showModal then Style.active else Attributes.class "" ]
-        [ modalBackground [ Events.onClick ToggleModal ] []
+        [ modalBackground [ Attributes.style "opacity" "0.7", Events.onClick ToggleModal ] []
         , modalContent []
             [ El.notification [ color Color.success ]
                 [ Html.text "inside a modal!" ]
@@ -365,8 +390,9 @@ viewNavigationsExample =
     { title = "Navigations"
     , subtitle = Nothing
     , content = 
-        [ column [ columnSettings ]
-            viewBreadcrumbExample
+        [ column [ columnSettings ] <|
+            viewBreadcrumbExample ++
+            viewMenuExample
         ]
     }
 
@@ -394,9 +420,40 @@ viewBreadcrumbExample =
         ]
     , breadcrumb
         [ bulletSeparator ]
-        [ linkItem [] "PI"
-        , linkItem [] "Y"
-        , linkItem [] "2r"
+        [ linkItem [] "Johnny"
+        , linkItem [] "B"
+        , linkItem [] "Goode"
+        ]
+    ]
+
+
+viewMenuExample : List (Html msg)
+viewMenuExample =
+    let
+        menuLink attrs linkText =
+            Html.li attrs [ Html.a [] [ Html.text linkText] ]
+    in
+    [ El.subtitle [] [ Html.text "Menu" ]
+    , menu []
+        [ menuLabel [] [ Html.text "Control structure" ]
+        , menuList []
+            [ Html.li
+                []
+                [ Html.a [] [ Html.text "Control" ]
+                , menuList []
+                    [ menuLink [] "Control.Applicative"
+                    , menuLink [] "Control.Monad"
+                    ]
+                ]
+            , Html.li
+                []
+                [ Html.a [] [ Html.text "Data" ]
+                , menuList []
+                    [ menuLink [] "Data.Functor"
+                    , menuLink [] "Data.Maybe"
+                    ]
+                ]
+            ]
         ]
     ]
 

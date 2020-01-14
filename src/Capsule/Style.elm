@@ -6,6 +6,7 @@ module Capsule.Style exposing
     , clearfix
     , clipped
     , expanded
+    , focused
     , fullheightWithNavbar
     , fullwidth
     , groupedCenter
@@ -114,6 +115,10 @@ right =
 
 
 -- STATE MODIFIERS
+
+focused : Attribute msg
+focused =
+    class "is-focused"
 
 
 hoverable : Attribute msg
