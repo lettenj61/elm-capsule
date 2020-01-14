@@ -2,11 +2,13 @@ module KitchenSink exposing (main)
 
 import Browser
 import Capsule.Columns exposing (column, columnWidth, columns, half)
+import Capsule.Components.Breadcrumb exposing (..)
 import Capsule.Components.Message exposing (..)
 import Capsule.Components.Modal exposing (..)
 import Capsule.Components.Navbar exposing (..)
 import Capsule.Components.Tabs exposing (tabs)
 import Capsule.Element as El
+import Capsule.Forms as Forms
 import Capsule.Layout as Layout
 import Capsule.Modifiers exposing (color, size)
 import Capsule.Responsive as Responsive
@@ -38,12 +40,7 @@ main =
 
 type alias Model =
     { example : Maybe Example
-    , widget : Widget
-    }
-
-
-type alias Widget =
-    { showModal : Bool
+    , showModal : Bool
     }
 
 
@@ -54,11 +51,14 @@ type Example
     | Tags
     | Message
     | Modal
+    | Navigations
 
 
 init : Model
 init =
-    Model (Just Welcome) (Widget False)
+    { example = Just Welcome
+    , showModal = False
+    }
 
 
 examples : List ( String, Example )
@@ -68,6 +68,7 @@ examples =
     , ( "Tags", Tags )
     , ( "Message", Message )
     , ( "Modal", Modal )
+    , ( "Navigations", Navigations )
     ]
 
 
@@ -110,9 +111,7 @@ update msg model =
         
         ToggleModal ->
             { example = model.example
-            , widget =
-                { showModal = not model.widget.showModal
-                }
+            , showModal = not model.showModal
             }
 
 
@@ -133,23 +132,14 @@ view model =
         detail =
             case model.example of
                 Just ex ->
-                    route ex model.widget
+                    route ex model
 
                 Nothing ->
-                    route Welcome model.widget
+                    route Welcome model
 
-        cdnLink =
-            Html.node "link"
-                [ Attributes.rel "stylesheet"
-                , Attributes.href "https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"
-                , Attributes.attribute "integrity" "sha256-D9M5yrVDqFlla7nlELDaYZIpXfFWDytQtiV+TaH6F1I="
-                , Attributes.attribute "crossorigin" "anonymous"
-                ]
-                []
     in
     Html.div [] <|
-        [ cdnLink
-        , viewNavbar
+        [ viewNavbar
         , viewTabs
         ]
         ++ viewFromDetail detail
@@ -158,11 +148,12 @@ view model =
 viewNavbar : Html Msg
 viewNavbar =
     navbar [ color Color.dark ]
-        [ navbarBrand []
+        [ navbarBrand
+            []
             [ navbarItemAnchor
                 [ Events.onClick <| Route Welcome
                 ]
-                [ Html.text "Elm Capsule" ]
+                [ Html.strong [] [ Html.text "Elm Capsule" ] ]
             , navbarBurger []
             ]
         , navbarMenu []
@@ -265,11 +256,41 @@ viewTagsExample =
         toTag ( text, colorName ) =
             El.tag [ color colorName ] [ Html.text text ]
 
+        toBadge labelString valueString colorName =
+            Forms.control []
+                [ El.tags
+                    [ Style.hasAddons ]
+                    [ El.tag [] [ Html.text labelString ]
+                    , El.tag [ color colorName ] [ Html.text valueString ]
+                    ]
+                ]
+
+        toDeletableTag labelString =
+            Forms.control []
+                [ El.tags
+                    [ Style.hasAddons ]
+                    [ El.tag [ color Color.dark ] [ Html.text labelString ]
+                    , El.deleteTag [] []
+                    ]
+                ]
+
         exampleCols =
             columns []
                 [ column [ columnSettings ]
-                    [ El.tags [] <|
-                        List.map toTag basicColors
+                    [ El.tags [] <| List.map toTag basicColors
+                    , Forms.multilineFieldGroup
+                        []
+                        [ toBadge "Task.succeed" "never" Color.danger
+                        , toBadge "Time.every" "1000" Color.primary
+                        ]
+                    , Forms.multilineFieldGroup
+                        []
+                        [ toDeletableTag "Web"
+                        , toDeletableTag "Virtual DOM"
+                        , toDeletableTag "HTML5"
+                        , toDeletableTag "Visualization"
+                        , toDeletableTag "Ergonomics"
+                        ]
                     ]
                 ]
     in
@@ -308,7 +329,7 @@ viewMessageExample =
     }
 
 
-viewModalExample : Widget -> Detail Msg
+viewModalExample : Model -> Detail Msg
 viewModalExample { showModal } =
     { title = "Modal"
     , subtitle = Just "Your humble pop-up"
@@ -317,9 +338,8 @@ viewModalExample { showModal } =
             [ El.button
                 [ Events.onClick ToggleModal
                 , color Color.info
-                , size Size.large
                 ]
-                [ Html.text "Show/Hide" ]
+                [ Html.text "Show modal" ]
             ]
         , viewModal showModal
         ]
@@ -340,6 +360,47 @@ viewModal showModal =
         ]
 
 
+viewNavigationsExample : Detail msg
+viewNavigationsExample =
+    { title = "Navigations"
+    , subtitle = Nothing
+    , content = 
+        [ column [ columnSettings ]
+            viewBreadcrumbExample
+        ]
+    }
+
+
+viewBreadcrumbExample : List (Html msg)
+viewBreadcrumbExample =
+    let
+        linkItem attrs linkText =
+            Html.li
+                attrs
+                [ Html.a [] [ Html.text linkText ] ]
+    in
+    [ El.subtitle [] [ Html.text "Breadcrumb" ]
+    , breadcrumb
+        []
+        [ linkItem [] "Usr"
+        , linkItem [] "Local"
+        , linkItem [ Style.active ] "Lib"
+        ]
+    , breadcrumb
+        [ arrowSeparator ]
+        [ linkItem [] "Get"
+        , linkItem [] "Set"
+        , linkItem [ Style.active ] "Launch"
+        ]
+    , breadcrumb
+        [ bulletSeparator ]
+        [ linkItem [] "PI"
+        , linkItem [] "Y"
+        , linkItem [] "2r"
+        ]
+    ]
+
+
 columnSettings : Attribute msg
 columnSettings =
     Responsive.columnSet
@@ -347,8 +408,8 @@ columnSettings =
         ]
 
 
-route : Example -> Widget -> Detail Msg
-route ex widget =
+route : Example -> Model -> Detail Msg
+route ex model =
     case ex of
         Welcome ->
             Detail "Welcome" (Just "Select samples from menu above!") []
@@ -366,4 +427,7 @@ route ex widget =
             viewMessageExample
 
         Modal ->
-            viewModalExample widget
+            viewModalExample model
+
+        Navigations ->
+            viewNavigationsExample

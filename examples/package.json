@@ -4,6 +4,11 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "make": "elm make --optimize --output=main.js src/KitchenSink.elm"
+    "dev": "parcel serve --port 8000 --no-source-maps src/index.html"
+  },
+  "devDependencies": {
+    "elm-hot": "^1.1.4",
+    "node-elm-compiler": "^5.0.4",
+    "parcel-bundler": "^1.12.4"
   }
 }

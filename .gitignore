@@ -1,8 +1,12 @@
+.cache/
+dist/
+yarn.lock
+
 ### Elm
 
 elm.html
 examples/main.js
-examples/bulma.min.css
+examples/src/bulma.min.css
 
 # elm-package generated files
 elm-stuff

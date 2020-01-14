@@ -22,8 +22,8 @@ Note that inner `ul` element is automatically added.
     pathNavigation : Html msg
     pathNavigation =
         breadcrumb []
-            [ a [ href "/first-step" ] [ text "First" ]
-            , a [ href "/javascript" ] [ text "JavaScript" ]
+            [ li [] [ a [ href "/first-step" ] [ text "First" ] ]
+            , li [] [ a [ href "/javascript" ] [ text "JavaScript" ] ]
             ]
 
 -}
