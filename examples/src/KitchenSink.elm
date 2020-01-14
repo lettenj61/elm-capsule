@@ -49,6 +49,7 @@ type Example
     = Welcome
     | Typography
     | Button
+    | Form
     | Tags
     | Message
     | Modal
@@ -66,6 +67,7 @@ examples : List ( String, Example )
 examples =
     [ ( "Typography", Typography )
     , ( "Button", Button )
+    , ( "Form", Form )
     , ( "Tags", Tags )
     , ( "Message", Message )
     , ( "Modal", Modal )
@@ -275,6 +277,59 @@ viewButtonExample =
     }
 
 
+viewFormExample : Detail msg
+viewFormExample =
+    let
+        content =
+            El.box
+                []
+                [ Forms.field []
+                    [ Forms.control []
+                        [ Forms.label [] [ Html.text "Description" ]
+                        , Forms.input
+                            [ Attributes.type_ "text"
+                            , Attributes.placeholder "One upon a time ..."
+                            ]
+                            []
+                        , Forms.help
+                            []
+                            [ Html.span [] [ Html.text "Charm your audience " ]
+                            , Html.a [] [ Html.text "Learn more" ]
+                            ]
+                        ]
+                    ]
+                , Forms.fieldGroup []
+                    [ Forms.control []
+                        [ Forms.input [ Attributes.type_ "date" ] []
+                        ]
+                    , Forms.control []
+                        [ El.button
+                            [ color Color.primary ]
+                            [ Html.text "Import" ]
+                        ]
+                    , Forms.control [ Style.expanded ]
+                        [ Forms.input
+                            [ Attributes.placeholder "Post a comment" ]
+                            []
+                        ]
+                    ]
+                , Forms.field []
+                    [ Forms.control []
+                        [ Forms.textarea
+                            [ color Color.primary
+                            , Attributes.placeholder "What brings you here?"
+                            ]
+                            []
+                        ]
+                    ]
+                ]
+    in
+    { title = "Form"
+    , subtitle = Nothing
+    , content = [ content ]
+    }
+
+
 viewTagsExample : Detail msg
 viewTagsExample =
     let
@@ -476,6 +531,9 @@ route ex model =
 
         Button ->
             viewButtonExample
+
+        Form ->
+            viewFormExample
         
         Tags ->
             viewTagsExample

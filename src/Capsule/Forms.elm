@@ -5,17 +5,19 @@ module Capsule.Forms exposing
     , fieldBody
     , fieldGroup
     , fieldLabel
+    , help
     , input
     , label
     , multilineFieldGroup
     , radio
     , select
+    , selectWith
     , textarea
     , toControl
     )
 
 import Capsule.Html exposing (Tagger, withMixins)
-import Html
+import Html exposing (Attribute)
 import Html.Attributes exposing (class, type_)
 
 
@@ -83,12 +85,15 @@ input =
 
 -}
 select : Tagger msg
-select attributes children =
+select =
+    selectWith []
+
+
+selectWith : List (Attribute msg) -> Tagger msg
+selectWith outerFacts attributes children =
     Html.div
-        [ class "select" ]
-        [ Html.select
-            attributes
-            children
+        (class "select" :: outerFacts)
+        [ Html.select attributes children
         ]
 
 
@@ -142,6 +147,15 @@ radio attributes children =
     Html.label
         [ class "radio" ]
         (underlying :: children)
+
+
+
+-- OPTIONAL HELP TEXT
+
+
+help : Tagger msg
+help =
+    Html.p |> withMixins [ class "help" ]
 
 
 
