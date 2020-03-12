@@ -1,6 +1,6 @@
 module Capsule.Forms.Control exposing
-    ( Builder
-    , build
+    ( Control
+    , toHtml
     , fromAttributes
     , setIconLeft
     , setIconRight
@@ -25,12 +25,12 @@ type alias ControlDetails msg =
     }
 
 
-type Builder msg
-    = Builder (ControlDetails msg)
+type Control msg
+    = Control (ControlDetails msg)
 
 
-defaultControlDetails : ControlDetails msg
-defaultControlDetails =
+defaultControl : ControlDetails msg
+defaultControl =
     { attributes = []
     , input = Html.text ""
     , iconLeft = Nothing
@@ -38,15 +38,15 @@ defaultControlDetails =
     }
 
 
-fromAttributes : List (Attribute msg) -> Builder msg
+fromAttributes : List (Attribute msg) -> Control msg
 fromAttributes attributes =
-    Builder { defaultControlDetails | attributes = attributes }
+    Control { defaultControl | attributes = attributes }
 
 
 {-| Finalize the builder and produce control node.
 
     import Capsule.Element exposing (tags, tag)
-    import Capsule.Forms.Contol as Builder
+    import Capsule.Forms.Contol as Control
     import Capsule.Modifiers exposing (color)
     import Capsule.Style exposing (hasAddons)
     import Capsule.Types.Color exposing (dark, primary)
@@ -54,17 +54,17 @@ fromAttributes attributes =
 
     badge : String -> String -> Html msg
     badge left right =
-        Builder.fromAttribute []
-            |> Builder.setInput
+        Control.fromAttributes []
+            |> Control.setInput
                 (tags [ hasAddons ]
                     [ tag [ color dark ] [ text left ]
                     , tag [ color primary ] [ text right ]
                     ]
                 )
-            |> Builder build
+            |> Control.toHtml
 -}
-build : Builder msg -> Html msg
-build (Builder details) =
+toHtml : Control msg -> Html msg
+toHtml (Control details) =
     let
         forceElement maybeElement =
             maybeElement
@@ -81,12 +81,12 @@ build (Builder details) =
         )
 
 
-modify : (ControlDetails msg -> ControlDetails msg) -> Builder msg -> Builder msg
-modify changeDetails (Builder details) =
-    Builder (changeDetails details)
+modify : (ControlDetails msg -> ControlDetails msg) -> Control msg -> Control msg
+modify change (Control details) =
+    Control (change details)
 
 
-setIconLeft : List (Attribute msg) -> String -> Builder msg -> Builder msg
+setIconLeft : List (Attribute msg) -> String -> Control msg -> Control msg
 setIconLeft attributes iconName =
     modify
         (\details ->
@@ -101,7 +101,7 @@ setIconLeft attributes iconName =
         )
 
 
-setIconRight : List (Attribute msg) -> String -> Builder msg -> Builder msg
+setIconRight : List (Attribute msg) -> String -> Control msg -> Control msg
 setIconRight attributes iconName =
     modify
         (\details ->
@@ -116,6 +116,6 @@ setIconRight attributes iconName =
         )
 
 
-setInput : Html msg -> Builder msg -> Builder msg
+setInput : Html msg -> Control msg -> Control msg
 setInput element =
     modify (\details -> { details | input = element })

@@ -3,20 +3,22 @@ module KitchenSink exposing (main)
 import Browser
 import Capsule.Columns exposing (column, columnWidth, columns, half)
 import Capsule.Components.Breadcrumb exposing (..)
+import Capsule.Components.Dropdown exposing (..)
 import Capsule.Components.Menu exposing (..)
 import Capsule.Components.Message exposing (..)
 import Capsule.Components.Modal exposing (..)
 import Capsule.Components.Navbar exposing (..)
+import Capsule.Components.Panel exposing (..)
 import Capsule.Components.Tabs exposing (tabs)
 import Capsule.Element as El
 import Capsule.Forms as Forms
 import Capsule.Layout as Layout
-import Capsule.Modifiers exposing (color, size)
+import Capsule.Modifiers exposing (..)
 import Capsule.Responsive as Responsive
-import Capsule.Style as Style
 import Capsule.Types.Breakpoint as Breakpoint
 import Capsule.Types.Color as Color exposing (Color)
 import Capsule.Types.Size as Size exposing (Size)
+import Capsule.Widget as UI
 import Html exposing (Attribute, Html)
 import Html.Attributes as Attributes
 import Html.Events as Events
@@ -65,35 +67,35 @@ init =
 
 examples : List ( String, Example )
 examples =
-    [ ( "Typography", Typography )
-    , ( "Button", Button )
-    , ( "Form", Form )
-    , ( "Tags", Tags )
-    , ( "Message", Message )
-    , ( "Modal", Modal )
-    , ( "Navigations", Navigations )
+    [ ( "Typography",   Typography )
+    , ( "Button",       Button )
+    , ( "Form",         Form )
+    , ( "Tags",         Tags )
+    , ( "Message",      Message )
+    , ( "Modal",        Modal )
+    , ( "Navigations",  Navigations )
     ]
 
 
 basicColors : List ( String, Color )
 basicColors =
-    [ ( "Primary", Color.primary )
-    , ( "Info", Color.info )
-    , ( "Success", Color.success )
-    , ( "Warning", Color.warning )
-    , ( "Danger", Color.danger )
-    , ( "Dark", Color.dark )
-    , ( "Light", Color.light )
-    , ( "Link", Color.link )
+    [ ( "Primary",  Color.primary )
+    , ( "Info",     Color.info )
+    , ( "Success",  Color.success )
+    , ( "Warning",  Color.warning )
+    , ( "Danger",   Color.danger )
+    , ( "Dark",     Color.dark )
+    , ( "Light",    Color.light )
+    , ( "Link",     Color.link )
     ]
 
 
 basicSizes : List ( String, Size )
 basicSizes =
-    [ ( "Normal", Size.normal )
-    , ( "Small", Size.small )
-    , ( "Medium", Size.medium )
-    , ( "Large", Size.large )
+    [ ( "Normal",   Size.normal )
+    , ( "Small",    Size.small )
+    , ( "Medium",   Size.medium )
+    , ( "Large",    Size.large )
     ]
 
 
@@ -165,14 +167,14 @@ viewNavbar =
 viewTabs : Model -> Html Msg
 viewTabs { example } =
     tabs
-        [ Style.marginless ]
+        [ marginless ]
         [ Html.ul [] <|
             List.map
                 (\( labelString, ex ) ->
                     let
                         activeState =
                             if Just ex == example then
-                                Style.active
+                                active
                             else
                                 Attributes.class ""
                     in
@@ -193,30 +195,39 @@ viewFromDetail { title, subtitle, content } =
         viewSubtitle =
             subtitle
                 |> Maybe.map
-                    (\val ->
-                        El.subtitle [] [ Html.text val ]
-                    )
+                    (\val -> UI.subtitle [] val )
                 |> Maybe.withDefault (Html.text "")
 
         viewDescription =
-            [ El.title [] [ Html.text title ]
+            [ UI.title [] title
             , viewSubtitle
             ]
-        
-        viewDetailWrap =
-            Layout.section []
-                [ Layout.fluidContainer []
-                    content
-                ]
+
     in
     [ Layout.hero [ color Color.light ] viewDescription
-    , viewDetailWrap
+    , UI.section True content
     ] 
 
 
 viewTypographyExample : Detail msg
 viewTypographyExample =
-    Detail "Typography" Nothing []
+    { title = "Typography"
+    , subtitle = Nothing
+    , content =
+        [ UI.content
+            [ UI.title [] "Header 1"
+            , UI.subtitle [] "Description"
+            , Html.p []
+                [ Html.text "Content paragraph #1 "
+                , Html.a [] [ Html.text "Link" ]
+                ]
+            , Html.ul []
+                [ Html.li [] [ Html.text "List item 1" ]
+                , Html.li [] [ Html.text "List item 2" ]
+                ]
+            ]
+        ]
+    }
 
 
 viewButtonExample : Detail msg
@@ -232,8 +243,8 @@ viewButtonExample =
                 (\pair -> coloredButton mods pair)
                 pairs
 
-        sectionTitle titleString =
-            El.subtitle [ size <| Size.fromInt 5 ] [ Html.text titleString ]
+        sectionTitle =
+            UI.subtitle [ size <| Size.fromInt 5 ]
 
         buttonStateRow text state =
             Html.tr []
@@ -245,17 +256,15 @@ viewButtonExample =
             columns []
                 [ column [ columnSettings ]
                     [ sectionTitle "Colors"
-                    , El.buttons [] <| pairsToHtml [] basicColors
+                    , UI.buttons [] <| pairsToHtml [] basicColors
                     , sectionTitle "Colors: light mode"
-                    , El.buttons [] <| pairsToHtml [ Style.light ] basicColors
+                    , UI.buttons [] <| pairsToHtml [ light ] basicColors
                     , sectionTitle "Rounded"
-                    , El.buttons [] <| pairsToHtml [ Style.rounded ] basicColors
+                    , UI.buttons [] <| pairsToHtml [ rounded ] basicColors
                     , sectionTitle "Sizes"
-                    , El.buttons [] <|
+                    , UI.buttons [] <|
                         List.map
-                            (\( text, val ) ->
-                                El.button [ size val ] [ Html.text text ]
-                            )
+                            (\( text, val ) -> UI.button [ size val ] text )
                             basicSizes
                     , sectionTitle "State"
                     , El.table
@@ -263,9 +272,22 @@ viewButtonExample =
                         [ Html.thead [] []
                         , Html.tbody
                             []
-                            [ buttonStateRow "loading" Style.loading
-                            , buttonStateRow "focused" Style.focused
-                            , buttonStateRow "hovered" Style.hovered
+                            [ buttonStateRow "loading" loading
+                            , buttonStateRow "focused" focused
+                            , buttonStateRow "hovered" hovered
+                            ]
+                        ]
+                    , sectionTitle "Dropdown"
+                    , El.box
+                        []
+                        [ dropdown
+                            [ hoverable ]
+                            [ dropdownTrigger [] [ Html.text "Hover me" ]
+                            , dropdownMenu []
+                                [ dropdownAnchor [] [ Html.text "Link 1" ]
+                                , dropdownAnchor [] [ Html.text "Link 2" ]
+                                , dropdownAnchor [] [ Html.text "Link 3" ]
+                                ]
                             ]
                         ]
                     ]
@@ -307,7 +329,7 @@ viewFormExample =
                             [ color Color.primary ]
                             [ Html.text "Import" ]
                         ]
-                    , Forms.control [ Style.expanded ]
+                    , Forms.control [ expanded ]
                         [ Forms.input
                             [ Attributes.placeholder "Post a comment" ]
                             []
@@ -339,7 +361,7 @@ viewTagsExample =
         toBadge labelString valueString colorName =
             Forms.control []
                 [ El.tags
-                    [ Style.hasAddons ]
+                    [ hasAddons ]
                     [ El.tag [] [ Html.text labelString ]
                     , El.tag [ color colorName ] [ Html.text valueString ]
                     ]
@@ -348,7 +370,7 @@ viewTagsExample =
         toDeletableTag labelString =
             Forms.control []
                 [ El.tags
-                    [ Style.hasAddons ]
+                    [ hasAddons ]
                     [ El.tag [ color Color.dark ] [ Html.text labelString ]
                     , El.deleteTag [] []
                     ]
@@ -375,7 +397,7 @@ viewTagsExample =
                 ]
     in
     { title = "Tags"
-    , subtitle = Just "Small, versatile, informative chip"
+    , subtitle = Just "Small, versatile, informative tip"
     , content = [ exampleCols ]
     }
 
@@ -414,7 +436,7 @@ viewModalExample { showModal } =
     { title = "Modal"
     , subtitle = Just "Your humble pop-up"
     , content =
-        [ El.box [ Style.centered ]
+        [ El.box [ centered ]
             [ El.button
                 [ Events.onClick ToggleModal
                 , color Color.info
@@ -430,7 +452,7 @@ viewModalExample { showModal } =
 viewModal : Bool -> Html Msg
 viewModal showModal =
     modal
-        [ if showModal then Style.active else Attributes.class "" ]
+        [ if showModal then active else Attributes.class "" ]
         [ modalBackground [ Attributes.style "opacity" "0.7", Events.onClick ToggleModal ] []
         , modalContent []
             [ El.notification [ color Color.success ]
@@ -445,9 +467,12 @@ viewNavigationsExample =
     { title = "Navigations"
     , subtitle = Nothing
     , content = 
-        [ column [ columnSettings ] <|
-            viewBreadcrumbExample ++
-            viewMenuExample
+        [ columns [] <|
+            [ column [ columnSettings ] <|
+                viewBreadcrumbExample ++
+                viewMenuExample ++
+                viewPanelExample
+            ]
         ]
     }
 
@@ -465,13 +490,13 @@ viewBreadcrumbExample =
         []
         [ linkItem [] "Usr"
         , linkItem [] "Local"
-        , linkItem [ Style.active ] "Lib"
+        , linkItem [ active ] "Lib"
         ]
     , breadcrumb
         [ arrowSeparator ]
         [ linkItem [] "Get"
         , linkItem [] "Set"
-        , linkItem [ Style.active ] "Launch"
+        , linkItem [ active ] "Launch"
         ]
     , breadcrumb
         [ bulletSeparator ]
@@ -509,6 +534,24 @@ viewMenuExample =
                     ]
                 ]
             ]
+        ]
+    ]
+
+
+viewPanelExample : List (Html msg)
+viewPanelExample =
+    [ panel
+        [ color Color.link ]
+        [ panelHeading [] [ Html.text "GUI" ]
+        , panelBlock
+            []
+            [ El.button [ color Color.primary, inverted, fullwidth ] [ Html.text "Force Push" ] ]
+        , panelTabs
+            []
+            ( List.map
+                (\s -> Html.a [] [ Html.text s ])
+                [ "Curry", "Turkey", "Fruit", "Yogurt" ]
+            )
         ]
     ]
 

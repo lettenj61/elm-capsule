@@ -1,4 +1,4 @@
-Aelm-capsule
+elm-capsule
 ============
 
 A package that helps Elm go well with Bulma.

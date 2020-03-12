@@ -10,7 +10,7 @@ module Capsule.Components.Card exposing
     , toCardHeaderTitle
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -19,32 +19,32 @@ import Html.Attributes exposing (class)
 -- CARD
 
 
-card : Tagger msg
+card : Builder msg
 card =
     Html.div |> withMixins [ class "card" ]
 
 
-cardImage : Tagger msg
+cardImage : Builder msg
 cardImage =
     Html.div |> withMixins [ class "card-image" ]
 
 
-cardContent : Tagger msg
+cardContent : Builder msg
 cardContent =
     Html.div |> withMixins [ class "card-content" ]
 
 
-cardFooter : Tagger msg
+cardFooter : Builder msg
 cardFooter =
     Html.footer |> withMixins [ class "card-footer" ]
 
 
-cardFooterItem : Tagger msg
+cardFooterItem : Builder msg
 cardFooterItem =
     Html.p |> withMixins [ class "card-footer-item" ]
 
 
-cardFooterLink : Tagger msg
+cardFooterLink : Builder msg
 cardFooterLink =
     Html.a |> withMixins [ class "card-footer-item" ]
 
@@ -74,11 +74,11 @@ cardHeader attributes props =
         ]
 
 
-cardHeaderTitle : Tagger msg
+cardHeaderTitle : Builder msg
 cardHeaderTitle =
     toCardHeaderTitle Html.p
 
 
-toCardHeaderTitle : Tagger msg -> Tagger msg
+toCardHeaderTitle : Builder msg -> Builder msg
 toCardHeaderTitle =
     withMixins [ class "card-header-title" ]

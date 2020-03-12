@@ -14,7 +14,7 @@ module Capsule.Columns exposing
     , withOffset
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute)
 import Html.Attributes exposing (class)
 
@@ -23,12 +23,12 @@ import Html.Attributes exposing (class)
 -- COLUMNS
 
 
-column : Tagger msg
+column : Builder msg
 column =
     Html.div |> withMixins [ class "column" ]
 
 
-columns : Tagger msg
+columns : Builder msg
 columns =
     Html.div |> withMixins [ class "columns" ]
 

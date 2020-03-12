@@ -24,7 +24,7 @@ module Capsule.Element exposing
     , toTitle
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -33,32 +33,32 @@ import Html.Attributes exposing (class)
 -- BASIC ELEMENTS
 
 
-box : Tagger msg
+box : Builder msg
 box =
     Html.div |> withMixins [ class "box" ]
 
 
-button : Tagger msg
+button : Builder msg
 button =
     Html.button |> withMixins [ class "button" ]
 
 
-buttonAnchor : Tagger msg
+buttonAnchor : Builder msg
 buttonAnchor =
     Html.a |> withMixins [ class "button" ]
 
 
-linkAnchor : Tagger msg
+linkAnchor : Builder msg
 linkAnchor =
     Html.a |> withMixins [ class "link" ]
 
 
-buttons : Tagger msg
+buttons : Builder msg
 buttons =
     Html.div |> withMixins [ class "buttons" ]
 
 
-content : Tagger msg
+content : Builder msg
 content =
     Html.div |> withMixins [ class "content" ]
 
@@ -73,7 +73,7 @@ deleteAnchor attributes =
     Html.a (class "delete" :: attributes) []
 
 
-toDelete : Tagger msg -> Tagger msg
+toDelete : Builder msg -> Builder msg
 toDelete =
     withMixins [ class "delete" ]
 
@@ -98,72 +98,72 @@ icon attributes iconClass =
             [ img [ src "my-picture.png" ] [] ]
 
 -}
-imageFigure : Tagger msg
+imageFigure : Builder msg
 imageFigure =
     toImage Html.figure
 
 
-toImage : Tagger msg -> Tagger msg
+toImage : Builder msg -> Builder msg
 toImage =
     withMixins [ class "image" ]
 
 
-notification : Tagger msg
+notification : Builder msg
 notification =
     Html.div |> withMixins [ class "notification" ]
 
 
-progress : Tagger msg
+progress : Builder msg
 progress =
     Html.progress |> withMixins [ class "progress" ]
 
 
-tableContainer : Tagger msg
+tableContainer : Builder msg
 tableContainer =
     Html.div |> withMixins [ class "table-container" ]
 
 
-table : Tagger msg
+table : Builder msg
 table =
     Html.table |> withMixins [ class "table" ]
 
 
-tag : Tagger msg
+tag : Builder msg
 tag =
     toTag Html.span
 
 
-tags : Tagger msg
+tags : Builder msg
 tags =
     Html.div |> withMixins [ class "tags" ]
 
 
-deleteTag : Tagger msg
+deleteTag : Builder msg
 deleteTag =
     Html.a
         |> withMixins [ class "tag", class "is-delete" ]
 
 
-toTag : Tagger msg -> Tagger msg
+toTag : Builder msg -> Builder msg
 toTag =
     withMixins [ class "tag" ]
 
 
-title : Tagger msg
+title : Builder msg
 title =
     toTitle Html.h1
 
 
-toTitle : Tagger msg -> Tagger msg
+toTitle : Builder msg -> Builder msg
 toTitle =
     withMixins [ class "title" ]
 
 
-subtitle : Tagger msg
+subtitle : Builder msg
 subtitle =
     toSubtitle Html.span
 
 
-toSubtitle : Tagger msg -> Tagger msg
+toSubtitle : Builder msg -> Builder msg
 toSubtitle =
     withMixins [ class "subtitle" ]

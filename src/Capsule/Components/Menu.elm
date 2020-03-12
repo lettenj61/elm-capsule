@@ -4,7 +4,7 @@ module Capsule.Components.Menu exposing
     , menuList
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html
 import Html.Attributes exposing (class)
 
@@ -13,21 +13,21 @@ import Html.Attributes exposing (class)
 -- MENU
 
 
-menu : Tagger msg
+menu : Builder msg
 menu =
     toMenu Html.aside
 
 
-toMenu : Tagger msg -> Tagger msg
+toMenu : Builder msg -> Builder msg
 toMenu =
     withMixins [ class "menu" ]
 
 
-menuLabel : Tagger msg
+menuLabel : Builder msg
 menuLabel =
     Html.p |> withMixins [ class "menu-label" ]
 
 
-menuList : Tagger msg
+menuList : Builder msg
 menuList =
     Html.ul |> withMixins [ class "menu-list" ]

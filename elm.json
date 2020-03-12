@@ -13,12 +13,11 @@
         "Capsule.Layout",
         "Capsule.Modifiers",
         "Capsule.Responsive",
-        "Capsule.Style",
-        "Capsule.TableStyle",
         "Capsule.Types",
         "Capsule.Types.Breakpoint",
         "Capsule.Types.Color",
-        "Capsule.Types.Size"
+        "Capsule.Types.Size",
+        "Capsule.Widget"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {

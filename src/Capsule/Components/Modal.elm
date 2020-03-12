@@ -10,7 +10,7 @@ module Capsule.Components.Modal exposing
     , modalContent
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -19,17 +19,17 @@ import Html.Attributes exposing (class)
 -- MODAL
 
 
-modal : Tagger msg
+modal : Builder msg
 modal =
     Html.div |> withMixins [ class "modal" ]
 
 
-modalBackground : Tagger msg
+modalBackground : Builder msg
 modalBackground =
     Html.div |> withMixins [ class "modal-background" ]
 
 
-modalContent : Tagger msg
+modalContent : Builder msg
 modalContent =
     Html.div |> withMixins [ class "modal-content" ]
 
@@ -45,7 +45,7 @@ modalClose attributes =
 -- MODAL CARD
 
 
-modalCard : Tagger msg
+modalCard : Builder msg
 modalCard =
     Html.div |> withMixins [ class "modal-card" ]
 
@@ -70,16 +70,16 @@ modalCardHead attributes props =
         ]
 
 
-modalCardTitle : Tagger msg
+modalCardTitle : Builder msg
 modalCardTitle =
     Html.p |> withMixins [ class "modal-card-title" ]
 
 
-modalCardBody : Tagger msg
+modalCardBody : Builder msg
 modalCardBody =
     Html.section |> withMixins [ class "modal-card-body" ]
 
 
-modalCardFoot : Tagger msg
+modalCardFoot : Builder msg
 modalCardFoot =
     Html.footer |> withMixins [ class "modal-card-foot" ]

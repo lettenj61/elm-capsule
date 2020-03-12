@@ -19,7 +19,7 @@ module Capsule.Layout exposing
     , toMedia
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -28,23 +28,23 @@ import Html.Attributes exposing (class)
 -- LAYOUT ELEMENTS
 
 
-container : Tagger msg
+container : Builder msg
 container =
     toContainer Html.div
 
 
-fluidContainer : Tagger msg
+fluidContainer : Builder msg
 fluidContainer =
     Html.div
         |> withMixins [ class "container", class "is-fluid" ]
 
 
-toContainer : Tagger msg -> Tagger msg
+toContainer : Builder msg -> Builder msg
 toContainer =
     withMixins [ class "container" ]
 
 
-section : Tagger msg
+section : Builder msg
 section =
     Html.section |> withMixins [ class "section" ]
 
@@ -64,21 +64,21 @@ level =
     toLevel Html.nav
 
 
-toLevel : Tagger msg -> List (Attribute msg) -> LevelProps msg -> Html msg
-toLevel tagger attributes props =
-    tagger
+toLevel : Builder msg -> List (Attribute msg) -> LevelProps msg -> Html msg
+toLevel builder attributes props =
+    builder
         (class "level" :: attributes)
         [ Html.div [ class "level-left" ] props.left
         , Html.div [ class "level-right" ] props.right
         ]
 
 
-levelItem : Tagger msg
+levelItem : Builder msg
 levelItem =
     toLevelItem Html.div
 
 
-toLevelItem : Tagger msg -> Tagger msg
+toLevelItem : Builder msg -> Builder msg
 toLevelItem =
     withMixins [ class "level-item" ]
 
@@ -104,9 +104,9 @@ media attributes props =
     toMedia Html.article attributes props
 
 
-toMedia : Tagger msg -> List (Attribute msg) -> MediaProps msg -> Html msg
-toMedia tagger attributes props =
-    tagger
+toMedia : Builder msg -> List (Attribute msg) -> MediaProps msg -> Html msg
+toMedia builder attributes props =
+    builder
         (class "media" :: attributes)
         [ Html.div
             [ class "media-left" ]
@@ -156,7 +156,7 @@ fullheightHero attributes props =
 -- FOOTER
 
 
-footer : Tagger msg
+footer : Builder msg
 footer =
     Html.footer |> withMixins [ class "footer" ]
 
@@ -165,21 +165,21 @@ footer =
 -- TILES
 
 
-tile : Tagger msg
+tile : Builder msg
 tile =
     Html.div |> withMixins [ class "tile" ]
 
 
-ancestorTile : Tagger msg
+ancestorTile : Builder msg
 ancestorTile =
     Html.div |> withMixins [ class "tile", class "is-ancestor" ]
 
 
-parentTile : Tagger msg
+parentTile : Builder msg
 parentTile =
     Html.div |> withMixins [ class "tile", class "is-parent" ]
 
 
-childTile : Tagger msg
+childTile : Builder msg
 childTile =
     Html.div |> withMixins [ class "tile", class "is-child" ]

@@ -5,7 +5,7 @@ module Capsule.Responsive exposing
     )
 
 import Capsule.Columns exposing (ColumnWidth, columnWidthToString)
-import Capsule.Html.Modifier as Modifier exposing (Modifier, toClass, toClassList)
+import Capsule.Builder as Modifier exposing (Modifier, toClass, toClassList)
 import Capsule.Types.Breakpoint as Breakpoint exposing (Breakpoint)
 import Capsule.Types.Size as Size exposing (Size)
 import Html exposing (Attribute)
@@ -35,7 +35,7 @@ atBreakpointToken break modifier =
 
 columnWidth : ColumnWidth -> Breakpoint -> Attribute msg
 columnWidth width break =
-    columnWidthToString width
+    "is-" ++ columnWidthToString width
         |> Modifier.fromString
         |> atBreakpoint break
 
@@ -47,7 +47,7 @@ columnSet settings =
             (\( width, break ) ->
                 atBreakpointToken
                     break
-                    (Modifier.fromString <| columnWidthToString <| width)
+                    ("is-" ++ columnWidthToString width |> Modifier.fromString)
             )
         |> toClassList
 

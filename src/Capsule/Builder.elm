@@ -1,5 +1,9 @@
-module Capsule.Html.Modifier exposing
-    ( Modifier
+module Capsule.Builder exposing
+    ( Builder
+    , Wrapper
+    , decorate
+    , withMixins
+    , Modifier
     , addPrefix
     , addSuffix
     , fromString
@@ -7,8 +11,39 @@ module Capsule.Html.Modifier exposing
     , toClassList
     )
 
-import Html exposing (Attribute)
+import Html exposing (Attribute, Html)
 import Html.Attributes as Attributes
+
+
+
+-- BUILDER
+
+
+type alias Builder msg =
+    List (Attribute msg) -> List (Html msg) -> Html msg
+
+
+type alias Wrapper msg =
+    List (Html msg) -> Html msg
+
+
+-- DECORATIONS
+
+
+decorate : Builder msg -> List (Attribute msg) -> Builder msg
+decorate builder mixins =
+    withMixins mixins builder
+
+
+withMixins : List (Attribute msg) -> Builder msg -> Builder msg
+withMixins mixins builder =
+    \attributes ->
+        \children ->
+            builder (mixins ++ attributes) children
+
+
+
+-- MODIFIERS
 
 
 type Modifier

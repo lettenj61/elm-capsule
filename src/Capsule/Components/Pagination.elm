@@ -7,7 +7,7 @@ module Capsule.Components.Pagination exposing
     , toPaginationList
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -32,22 +32,22 @@ pagination attributes props =
             ]
 
 
-paginationPrevious : Tagger msg
+paginationPrevious : Builder msg
 paginationPrevious =
     Html.a |> withMixins [ class "pagination-previous" ]
 
 
-paginationNext : Tagger msg
+paginationNext : Builder msg
 paginationNext =
     Html.a |> withMixins [ class "pagination-next" ]
 
 
-toPaginationList : Tagger msg -> Tagger msg
+toPaginationList : Builder msg -> Builder msg
 toPaginationList =
     withMixins [ class "pagination-list" ]
 
 
-paginationList : Tagger msg
+paginationList : Builder msg
 paginationList =
     toPaginationList Html.ul
 

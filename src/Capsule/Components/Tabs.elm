@@ -1,6 +1,6 @@
 module Capsule.Components.Tabs exposing (tabs)
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (nav)
 import Html.Attributes exposing (class)
 
@@ -9,6 +9,6 @@ import Html.Attributes exposing (class)
 -- TABS
 
 
-tabs : Tagger msg
+tabs : Builder msg
 tabs =
     nav |> withMixins [ class "tabs" ]

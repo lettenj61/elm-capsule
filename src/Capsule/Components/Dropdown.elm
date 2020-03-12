@@ -1,15 +1,16 @@
 module Capsule.Components.Dropdown exposing
     ( dropdown
+    , dropdownAnchor
     , dropdownContent
     , dropdownDivider
     , dropdownItem
-    , dropdownItemAnchor
     , dropdownMenu
     , dropdownTrigger
     , toDropdownItem
+    , toDropdownTrigger
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -18,19 +19,33 @@ import Html.Attributes exposing (class)
 -- DROPDOWN
 
 
-dropdown : Tagger msg
+dropdown : Builder msg
 dropdown =
     Html.div |> withMixins [ class "dropdown" ]
 
 
-dropdownTrigger : Tagger msg
-dropdownTrigger =
-    Html.button |> withMixins [ class "dropdown-trigger" ]
+dropdownTrigger : Builder msg
+dropdownTrigger attributes children =
+    toDropdownTrigger
+        Html.button
+            (class "button" :: attributes)
+            children
 
 
-dropdownMenu : Tagger msg
-dropdownMenu =
-    Html.div |> withMixins [ class "dropdown-menu" ]
+toDropdownTrigger : Builder msg -> Builder msg
+toDropdownTrigger builder attributes children =
+    Html.div
+        [ class "dropdown-trigger" ]
+        [ builder attributes children
+        ]
+
+
+dropdownMenu : Builder msg
+dropdownMenu attributes children =
+    Html.div
+        [ class "dropdown-menu" ]
+        [ dropdownContent attributes children
+        ]
 
 
 dropdownDivider : List (Attribute msg) -> Html msg
@@ -40,21 +55,21 @@ dropdownDivider attributes =
         []
 
 
-dropdownContent : Tagger msg
+dropdownContent : Builder msg
 dropdownContent =
     Html.div |> withMixins [ class "dropdown-content" ]
 
 
-dropdownItem : Tagger msg
+dropdownItem : Builder msg
 dropdownItem =
     toDropdownItem Html.div
 
 
-dropdownItemAnchor : Tagger msg
-dropdownItemAnchor =
+dropdownAnchor : Builder msg
+dropdownAnchor =
     toDropdownItem Html.a
 
 
-toDropdownItem : Tagger msg -> Tagger msg
+toDropdownItem : Builder msg -> Builder msg
 toDropdownItem =
     withMixins [ class "dropdown-item" ]

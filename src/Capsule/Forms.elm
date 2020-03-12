@@ -16,7 +16,7 @@ module Capsule.Forms exposing
     , toControl
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute)
 import Html.Attributes exposing (class, type_)
 
@@ -25,33 +25,33 @@ import Html.Attributes exposing (class, type_)
 -- FIELDS
 
 
-field : Tagger msg
+field : Builder msg
 field =
     Html.div |> withMixins [ class "field" ]
 
 
-fieldGroup : Tagger msg
+fieldGroup : Builder msg
 fieldGroup =
     Html.div |> withMixins [ class "field", class "is-grouped" ]
 
 
-multilineFieldGroup : Tagger msg
+multilineFieldGroup : Builder msg
 multilineFieldGroup =
     Html.div
         |> withMixins [ class "field", class "is-grouped", class "is-grouped-multiline" ]
 
 
-label : Tagger msg
+label : Builder msg
 label =
     Html.label |> withMixins [ class "label" ]
 
 
-control : Tagger msg
+control : Builder msg
 control =
     toControl Html.div
 
 
-toControl : Tagger msg -> Tagger msg
+toControl : Builder msg -> Builder msg
 toControl =
     withMixins [ class "control" ]
 
@@ -60,7 +60,7 @@ toControl =
 -- INDIVIDUAL CONTROLS
 
 
-input : Tagger msg
+input : Builder msg
 input =
     Html.input |> withMixins [ class "input" ]
 
@@ -68,7 +68,7 @@ input =
 {-| A select element wrapped in special div.
 
     import Capsule.Forms exposing (control, field, select)
-    import Capsule.Style exposing (..)
+    import Capsule.Modifiers exposing (..)
     import Html exposing (Html, option, text)
 
     view : Html msg
@@ -84,12 +84,12 @@ input =
             ]
 
 -}
-select : Tagger msg
+select : Builder msg
 select =
     selectWith []
 
 
-selectWith : List (Attribute msg) -> Tagger msg
+selectWith : List (Attribute msg) -> Builder msg
 selectWith outerFacts attributes children =
     Html.div
         (class "select" :: outerFacts)
@@ -97,7 +97,7 @@ selectWith outerFacts attributes children =
         ]
 
 
-textarea : Tagger msg
+textarea : Builder msg
 textarea =
     Html.textarea |> withMixins [ class "textarea" ]
 
@@ -123,7 +123,7 @@ renders to:
     </label>
 
 -}
-checkbox : Tagger msg
+checkbox : Builder msg
 checkbox attributes children =
     let
         underlying =
@@ -136,7 +136,7 @@ checkbox attributes children =
         (underlying :: children)
 
 
-radio : Tagger msg
+radio : Builder msg
 radio attributes children =
     let
         underlying =
@@ -153,7 +153,7 @@ radio attributes children =
 -- OPTIONAL HELP TEXT
 
 
-help : Tagger msg
+help : Builder msg
 help =
     Html.p |> withMixins [ class "help" ]
 
@@ -162,11 +162,11 @@ help =
 -- HORIZONTAL FIELD
 
 
-fieldLabel : Tagger msg
+fieldLabel : Builder msg
 fieldLabel =
     Html.div |> withMixins [ class "field-label" ]
 
 
-fieldBody : Tagger msg
+fieldBody : Builder msg
 fieldBody =
     Html.div |> withMixins [ class "field-body" ]

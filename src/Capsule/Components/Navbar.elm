@@ -11,7 +11,7 @@ module Capsule.Components.Navbar exposing
     , toNavbarItem
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -20,7 +20,7 @@ import Html.Attributes exposing (class)
 -- NAVBAR
 
 
-navbar : Tagger msg
+navbar : Builder msg
 navbar =
     Html.nav |> withMixins [ class "navbar" ]
 
@@ -31,32 +31,32 @@ navbarBurger attributes =
         List.repeat 3 (Html.span [] [])
 
 
-navbarBrand : Tagger msg
+navbarBrand : Builder msg
 navbarBrand =
     Html.div |> withMixins [ class "navbar-brand" ]
 
 
-navbarDropdown : Tagger msg
+navbarDropdown : Builder msg
 navbarDropdown =
     Html.div |> withMixins [ class "navbar-dropdown" ]
 
 
-navbarLink : Tagger msg
+navbarLink : Builder msg
 navbarLink =
     Html.a |> withMixins [ class "navbar-link" ]
 
 
-navbarItem : Tagger msg
+navbarItem : Builder msg
 navbarItem =
     toNavbarItem Html.div
 
 
-navbarItemAnchor : Tagger msg
+navbarItemAnchor : Builder msg
 navbarItemAnchor =
     toNavbarItem Html.a
 
 
-toNavbarItem : Tagger msg -> Tagger msg
+toNavbarItem : Builder msg -> Builder msg
 toNavbarItem =
     withMixins [ class "navbar-item" ]
 

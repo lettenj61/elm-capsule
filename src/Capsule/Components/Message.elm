@@ -4,7 +4,7 @@ module Capsule.Components.Message exposing
     , messageHeader
     )
 
-import Capsule.Html exposing (Tagger, withMixins)
+import Capsule.Builder exposing (Builder, withMixins)
 import Html
 import Html.Attributes exposing (class)
 
@@ -13,16 +13,16 @@ import Html.Attributes exposing (class)
 -- MESSAGE
 
 
-message : Tagger msg
+message : Builder msg
 message =
     Html.article |> withMixins [ class "message" ]
 
 
-messageHeader : Tagger msg
+messageHeader : Builder msg
 messageHeader =
     Html.div |> withMixins [ class "message-header" ]
 
 
-messageBody : Tagger msg
+messageBody : Builder msg
 messageBody =
     Html.div |> withMixins [ class "message-body" ]
