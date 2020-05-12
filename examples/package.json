@@ -3,12 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel serve --port 8000 --no-source-maps src/index.html"
+    "elm": "elm make --optimize --output src/KitchenSink.js src/KitchenSink.elm",
+    "bundle": "google-closure-compiler --js src/KitchenSink.js --js src/index.js  --js_output_file src/bundle.js --isolation_mode IIFE"
   },
   "devDependencies": {
-    "elm-hot": "^1.1.4",
-    "node-elm-compiler": "^5.0.4",
-    "parcel-bundler": "^1.12.4"
+    "google-closure-compiler": "^20200504.0.0"
   }
 }

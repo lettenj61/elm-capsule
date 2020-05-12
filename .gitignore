@@ -5,7 +5,8 @@ yarn.lock
 ### Elm
 
 elm.html
-examples/main.js
+examples/src/KitchenSink.js
+examples/src/bundle.js
 examples/src/bulma.min.css
 
 # elm-package generated files

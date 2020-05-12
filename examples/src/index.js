@@ -1,4 +1,4 @@
-import { Elm } from './KitchenSink.elm'
+const Elm = window.Elm || {};
 
 window.addEventListener('DOMContentLoaded', () => {
   const app = Elm.KitchenSink.init({
