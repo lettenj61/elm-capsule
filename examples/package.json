@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "elm": "elm make --optimize --output src/KitchenSink.js src/KitchenSink.elm",
-    "bundle": "google-closure-compiler --js src/KitchenSink.js --js src/index.js  --js_output_file src/bundle.js --isolation_mode IIFE"
+    "elm": "elm make --optimize --output dist/KitchenSink.js src/KitchenSink.elm",
+    "minify": "google-closure-compiler --js dist/KitchenSink.js --js dist/index.js --js_output_file dist/bundle.js --isolation_mode IIFE",
+    "bundle": "npm run elm && npm run minify"
   },
   "devDependencies": {
     "google-closure-compiler": "^20200504.0.0"

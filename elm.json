@@ -1,23 +1,14 @@
 {
     "type": "package",
     "name": "lettenj61/elm-capsule",
-    "summary": "A package that helps Elm go well with Bulma",
+    "summary": "Help Bulma go well with Elm",
     "license": "MIT",
     "version": "0.1.0",
     "exposed-modules": [
         "Capsule",
-        "Capsule.Columns",
-        "Capsule.Element",
         "Capsule.Forms",
-        "Capsule.Forms.Control",
         "Capsule.Layout",
-        "Capsule.Modifiers",
-        "Capsule.Responsive",
-        "Capsule.Types",
-        "Capsule.Types.Breakpoint",
-        "Capsule.Types.Color",
-        "Capsule.Types.Size",
-        "Capsule.Widget"
+        "Capsule.Widgets"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {

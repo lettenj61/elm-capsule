@@ -1,13 +1,10 @@
 .cache/
-dist/
 yarn.lock
+**/dist/*.*
+!examples/dist/index.html
+!examples/dist/index.js
 
 ### Elm
-
-elm.html
-examples/src/KitchenSink.js
-examples/src/bundle.js
-examples/src/bulma.min.css
 
 # elm-package generated files
 elm-stuff

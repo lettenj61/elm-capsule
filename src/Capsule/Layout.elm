@@ -1,185 +1,57 @@
-module Capsule.Layout exposing
-    ( ancestorTile
-    , childTile
-    , container
-    , defaultMedia
-    , fluidContainer
-    , footer
-    , fullheightHero
-    , hero
-    , level
-    , levelItem
-    , media
-    , parentTile
-    , section
-    , tile
-    , toContainer
-    , toLevel
-    , toLevelItem
-    , toMedia
-    )
+module Capsule.Layout exposing (..)
 
-import Capsule.Builder exposing (Builder, withMixins)
+import Capsule.Internal exposing (Tag, defaultDiv, mixin, wrap)
 import Html exposing (Attribute, Html)
-import Html.Attributes exposing (class)
+import Html.Attributes as Attrs exposing (class)
+import Html.Attributes exposing (default)
 
 
 
--- LAYOUT ELEMENTS
+-- WRAPPERS
 
 
-container : Builder msg
+container : Tag msg
 container =
-    toContainer Html.div
+    defaultDiv "container"
 
 
-fluidContainer : Builder msg
+fluidContainer : Tag msg
 fluidContainer =
-    Html.div
-        |> withMixins [ class "container", class "is-fluid" ]
+    defaultDiv "container is-fluid"
 
 
-toContainer : Builder msg -> Builder msg
-toContainer =
-    withMixins [ class "container" ]
-
-
-section : Builder msg
+section : Tag msg
 section =
-    Html.section |> withMixins [ class "section" ]
+    Html.section |> mixin [ class "section" ]
 
 
-
--- LEVEL
-
-
-type alias LevelProps msg =
-    { left : List (Html msg)
-    , right : List (Html msg)
-    }
-
-
-level : List (Attribute msg) -> LevelProps msg -> Html msg
-level =
-    toLevel Html.nav
-
-
-toLevel : Builder msg -> List (Attribute msg) -> LevelProps msg -> Html msg
-toLevel builder attributes props =
-    builder
-        (class "level" :: attributes)
-        [ Html.div [ class "level-left" ] props.left
-        , Html.div [ class "level-right" ] props.right
-        ]
-
-
-levelItem : Builder msg
-levelItem =
-    toLevelItem Html.div
-
-
-toLevelItem : Builder msg -> Builder msg
-toLevelItem =
-    withMixins [ class "level-item" ]
-
-
-
--- MEDIA OBJECT
-
-
-type alias MediaProps msg =
-    { left : List (Html msg)
-    , content : List (Html msg)
-    , right : List (Html msg)
-    }
-
-
-defaultMedia : MediaProps msg
-defaultMedia =
-    MediaProps [] [] []
-
-
-media : List (Attribute msg) -> MediaProps msg -> Html msg
-media attributes props =
-    toMedia Html.article attributes props
-
-
-toMedia : Builder msg -> List (Attribute msg) -> MediaProps msg -> Html msg
-toMedia builder attributes props =
-    builder
-        (class "media" :: attributes)
-        [ Html.div
-            [ class "media-left" ]
-            props.left
-        , Html.div
-            [ class "media-content" ]
-            props.content
-        , Html.div
-            [ class "media-right" ]
-            props.right
-        ]
-
-
-
--- HERO
-
-
-type alias FullheightHeroProps msg =
-    { navbar : List (Html msg)
-    , content : List (Html msg)
-    , foot : List (Html msg)
-    }
-
-
-hero : List (Attribute msg) -> List (Html msg) -> Html msg
-hero attributes heroContent =
+hero : Tag msg
+hero attrs children =
     Html.section
-        (class "hero" :: attributes)
-        [ Html.div
-            [ class "hero-body" ]
-            [ container [] heroContent
+        (attrs ++ [class "hero"])
+        [ defaultDiv "hero-body"
+            []
+            [ container [] children
             ]
         ]
 
 
-fullheightHero : List (Attribute msg) -> FullheightHeroProps msg -> Html msg
-fullheightHero attributes props =
-    Html.section
-        (class "hero" :: attributes)
-        [ Html.div [ class "hero-head" ] props.navbar
-        , Html.div [ class "hero-body" ] props.content
-        , Html.div [ class "hero-foot" ] props.foot
+type alias HeroDetail msg =
+    { head : Html msg
+    , body : List (Html msg)
+    , foot : Html msg
+    }
+
+
+fullheightHero : List (Attribute msg) -> HeroDetail msg -> Html msg
+fullheightHero attrs props =
+    (Html.section |> mixin [class "hero"])
+        attrs
+        [ Html.div [class "hero-head"] [props.head]
+        , Html.div [class "hero-body"] props.body
+        , Html.div [class "hero-foot"] [props.foot]
         ]
 
 
+-- EXPERIMENTS
 
--- FOOTER
-
-
-footer : Builder msg
-footer =
-    Html.footer |> withMixins [ class "footer" ]
-
-
-
--- TILES
-
-
-tile : Builder msg
-tile =
-    Html.div |> withMixins [ class "tile" ]
-
-
-ancestorTile : Builder msg
-ancestorTile =
-    Html.div |> withMixins [ class "tile", class "is-ancestor" ]
-
-
-parentTile : Builder msg
-parentTile =
-    Html.div |> withMixins [ class "tile", class "is-parent" ]
-
-
-childTile : Builder msg
-childTile =
-    Html.div |> withMixins [ class "tile", class "is-child" ]
