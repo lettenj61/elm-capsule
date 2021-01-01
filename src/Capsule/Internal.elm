@@ -12,15 +12,6 @@ type alias Tag msg =
     List (Attribute msg) -> List (Html msg) -> Html msg
 
 
-wrap : List (Attribute msg) -> Tag msg -> Tag msg -> Tag msg
-wrap defaults outer inner =
-    \attrs children ->
-        outer
-            defaults
-            [ inner attrs children
-            ]
-
-
 mixin : List (Attribute msg) -> Tag msg -> Tag msg
 mixin defaults tag =
     \attrs children ->

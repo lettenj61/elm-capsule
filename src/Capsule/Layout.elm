@@ -1,6 +1,6 @@
 module Capsule.Layout exposing (..)
 
-import Capsule.Internal exposing (Tag, defaultDiv, mixin, wrap)
+import Capsule.Internal exposing (Tag, defaultDiv, mixin)
 import Html exposing (Attribute, Html)
 import Html.Attributes as Attrs exposing (class)
 import Html.Attributes exposing (default)

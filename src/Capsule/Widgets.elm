@@ -6,6 +6,15 @@ import Html.Attributes as Attrs exposing (class)
 
 
 
+-- BLOCK
+
+
+block : Tag msg
+block =
+    defaultDiv "block"
+
+
+
 -- BOX
 
 
