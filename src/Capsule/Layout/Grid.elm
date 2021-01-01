@@ -156,13 +156,11 @@ defineColumn : List (Attribute msg) -> List ColumnOption -> Tag msg
 defineColumn extras options =
     let
         columnClasses =
-            List.map
-                (\opt ->
-                    class (toClassName opt)
-                )
-                options
+            options
+                |> List.map toClassName
+                |> String.join " "
     in
-    mixin (extras ++ columnClasses) Html.div
+    mixin (extras ++ [ class ("column " ++ columnClasses) ]) Html.div
 
 
 toClassName : ColumnOption -> String
