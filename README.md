@@ -6,17 +6,13 @@ A package that helps Elm go well with Bulma.
 
 ## Development
 
-First, grab fresh copy of `bulma.min.css` and save it under `examples/src`.
-
-Then:
+To view example UI:
 
 ```
 $ cd ./examples
-$ yarn
-$ yarn dev
+$ pnpm install
+$ pnpm run start
 ```
-
-And development server starts on `localhost:8000`, powered by `parceljs`.
 
 
 ## License
