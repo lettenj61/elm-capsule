@@ -5,19 +5,11 @@
     "license": "MIT",
     "version": "0.1.0",
     "exposed-modules": [
-        "Capsule",
-        "Capsule.Columns",
-        "Capsule.Element",
-        "Capsule.Forms",
-        "Capsule.Forms.Control",
-        "Capsule.Layout",
-        "Capsule.Modifiers",
-        "Capsule.Responsive",
-        "Capsule.Types",
-        "Capsule.Types.Breakpoint",
-        "Capsule.Types.Color",
-        "Capsule.Types.Size",
-        "Capsule.Widget"
+        "Bulma.Columns",
+        "Bulma.Complex",
+        "Bulma.Element",
+        "Bulma.Form",
+        "Bulma.Layout"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {

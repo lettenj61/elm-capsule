@@ -1,12 +1,13 @@
 {
-  "name": "elm-capsule",
-  "version": "0.0.0",
+  "name": "@lttn/elm-capsule-examples",
+  "version": "0",
   "private": true,
   "scripts": {
-    "elm": "elm make --optimize --output src/KitchenSink.js src/KitchenSink.elm",
-    "bundle": "google-closure-compiler --js src/KitchenSink.js --js src/index.js  --js_output_file src/bundle.js --isolation_mode IIFE"
+    "start": "parcel serve -p 9001 src/index.html"
   },
   "devDependencies": {
-    "google-closure-compiler": "^20200504.0.0"
+    "@parcel/transformer-elm": "2.7.0",
+    "bulma": "^0.9.4",
+    "parcel": "2.7.0"
   }
 }
