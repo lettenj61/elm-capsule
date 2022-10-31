@@ -10,6 +10,8 @@ module Bulma.Layout exposing
 
 {-| Bulma layout and wrapper classes.
 
+  - Tile layout is not supported.
+
 
 # Container
 
