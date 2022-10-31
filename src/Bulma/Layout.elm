@@ -1,12 +1,11 @@
 module Bulma.Layout exposing
     ( container, fluidContainer
+    , LevelProps, level, asLevelItem, mobileLevel, defaultLevel, setLevelLeft, setLevelRight
     , MediaProps, defaultMedia, media, setMediaContent, setMediaLeft, setMediaRight
     , hero
     , section
     , footer
     , wrapper
-    -- , level
-    -- , fullheightHero
     )
 
 {-| Bulma layout and wrapper classes.
@@ -19,7 +18,7 @@ module Bulma.Layout exposing
 
 # Level
 
-Not implemented.
+@docs LevelProps, level, asLevelItem, mobileLevel, defaultLevel, setLevelLeft, setLevelRight
 
 
 # Media object
@@ -95,6 +94,65 @@ container =
 fluidContainer : List (Attribute msg) -> List (Html msg) -> Html msg
 fluidContainer =
     styled_ Html.div "container is-fluid"
+
+
+{-| -}
+type alias LevelProps msg =
+    { left : List (Html msg)
+    , right : List (Html msg)
+    }
+
+
+{-| -}
+defaultLevel : LevelProps msg
+defaultLevel =
+    { left = []
+    , right = []
+    }
+
+
+{-| -}
+setLevelLeft : List (Html msg) -> LevelProps msg -> LevelProps msg
+setLevelLeft levelLeft props =
+    { props | left = levelLeft }
+
+
+{-| -}
+setLevelRight : List (Html msg) -> LevelProps msg -> LevelProps msg
+setLevelRight levelRight props =
+    { props | right = levelRight }
+
+
+{-| -}
+level : LevelProps msg -> Html msg
+level props =
+    Html.nav
+        [ class "level" ]
+        [ Html.div
+            [ class "level-left" ]
+            props.left
+        , Html.div
+            [ class "level-right" ]
+            props.right
+        ]
+
+
+{-| -}
+mobileLevel : List (Html msg) -> Html msg
+mobileLevel children =
+    Html.div
+        [ class "level is-mobile" ]
+        children
+
+
+{-| -}
+asLevelItem :
+    (List (Attribute msg) -> List (Html msg) -> Html msg)
+    -> List (Attribute msg)
+    -> List (Html msg)
+    -> Html msg
+asLevelItem h =
+    styled_ h "level-item"
 
 
 {-| -}

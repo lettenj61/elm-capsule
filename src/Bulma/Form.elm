@@ -1,5 +1,6 @@
 module Bulma.Form exposing
-    ( field, groupedField, label, control
+    ( field, fieldWithAddons, groupedField, label, control
+    , ControlWithIconsProps, controlWithIcons, wrapControlWithIcons, setIconLeft, setIconRight
     , input, checkbox
     , textarea
     , SelectProps, select
@@ -10,7 +11,8 @@ module Bulma.Form exposing
 
 # General
 
-@docs field, groupedField, label, control
+@docs field, fieldWithAddons, groupedField, label, control
+@docs ControlWithIconsProps, controlWithIcons, wrapControlWithIcons, setIconLeft, setIconRight
 @docs input, checkbox
 @docs textarea
 @docs SelectProps, select
@@ -35,6 +37,12 @@ groupedField =
 
 
 {-| -}
+fieldWithAddons : List (Attribute msg) -> List (Html msg) -> Html msg
+fieldWithAddons =
+    styled_ Html.div "field has-addons"
+
+
+{-| -}
 label : List (Attribute msg) -> List (Html msg) -> Html msg
 label =
     styled_ Html.label "label"
@@ -45,6 +53,64 @@ label =
 control : List (Attribute msg) -> List (Html msg) -> Html msg
 control =
     styled_ Html.div "control"
+
+
+{-| -}
+type alias ControlWithIconsProps msg =
+    { control : Html msg
+    , iconLeft : Maybe (Html msg)
+    , iconRight : Maybe (Html msg)
+    }
+
+
+{-| -}
+controlWithIcons : List (Attribute msg) -> ControlWithIconsProps msg -> Html msg
+controlWithIcons attributes props =
+    let
+        classSuffix =
+            case ( props.iconLeft, props.iconRight ) of
+                ( Nothing, Nothing ) ->
+                    ""
+
+                ( Just _, Just _ ) ->
+                    " has-icons-left has-icons-right"
+
+                ( Just _, _ ) ->
+                    " has-icons-left"
+
+                ( _, Just _ ) ->
+                    " has-icons-right"
+
+        controlClass =
+            class ("control" ++ classSuffix)
+    in
+    Html.div
+        (controlClass :: attributes)
+        [ props.control
+        , Maybe.withDefault (Html.text "") props.iconLeft
+        , Maybe.withDefault (Html.text "") props.iconRight
+        ]
+
+
+{-| -}
+wrapControlWithIcons : Html msg -> ControlWithIconsProps msg
+wrapControlWithIcons control_ =
+    { control = control_
+    , iconLeft = Nothing
+    , iconRight = Nothing
+    }
+
+
+{-| -}
+setIconLeft : Html msg -> ControlWithIconsProps msg -> ControlWithIconsProps msg
+setIconLeft iconLeft props =
+    { props | iconLeft = Just iconLeft }
+
+
+{-| -}
+setIconRight : Html msg -> ControlWithIconsProps msg -> ControlWithIconsProps msg
+setIconRight iconRight props =
+    { props | iconRight = Just iconRight }
 
 
 {-| -}
