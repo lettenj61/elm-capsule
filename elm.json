@@ -3,7 +3,7 @@
     "name": "lettenj61/elm-capsule",
     "summary": "A package that helps Elm go well with Bulma",
     "license": "MIT",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "exposed-modules": [
         "Bulma.Columns",
         "Bulma.Complex",

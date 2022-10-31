@@ -6,8 +6,10 @@ import Bulma.Complex as Widget
 import Bulma.Element as El
 import Bulma.Form as Form
 import Bulma.Layout as Layout
+import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (attribute, class, href, id)
+import Html.Events as Events
 
 
 
@@ -29,7 +31,8 @@ main =
 
 type alias Model =
     { example : Maybe Example
-    , showModal : Bool
+    , burgerMenu : Bool
+    , dropdowns : Dict Int Bool
     }
 
 
@@ -47,7 +50,8 @@ type Example
 init : Model
 init =
     { example = Just Welcome
-    , showModal = False
+    , burgerMenu = False
+    , dropdowns = Dict.fromList []
     }
 
 
@@ -56,12 +60,45 @@ init =
 
 
 type Msg
-    = Msg
+    = NoOp
+    | ToggleBurger
+    | ToggleDropdownAt Int
 
 
 update : Msg -> Model -> Model
-update _ model =
-    model
+update msg model =
+    case msg of
+        NoOp ->
+            model
+
+        ToggleBurger ->
+            { model
+                | burgerMenu = not model.burgerMenu
+            }
+
+        ToggleDropdownAt dropdown ->
+            model
+                |> toggleDropdownState dropdown
+
+
+getDropdownState : Int -> Model -> Bool
+getDropdownState dropdownId { dropdowns } =
+    dropdowns
+        |> Dict.get dropdownId
+        |> Maybe.withDefault False
+
+
+toggleDropdownState : Int -> Model -> Model
+toggleDropdownState dropdownId model =
+    { model
+        | dropdowns =
+            let
+                newState =
+                    not <|
+                        getDropdownState dropdownId model
+            in
+            Dict.insert dropdownId newState model.dropdowns
+    }
 
 
 
@@ -71,27 +108,43 @@ update _ model =
 view : Model -> Html Msg
 view model =
     div []
-        [ viewHeader
+        [ viewHeader model.burgerMenu
         , viewMain
             [ viewMedia
             , viewButtons
+            , viewDropdowns model
             , viewSelectVariants
+            , viewTabs
+            , viewMessagesVariants
+            , viewPagination
             ]
         ]
 
 
-viewHeader : Html msg
-viewHeader =
+viewHeader : Bool -> Html Msg
+viewHeader isMenuActive =
     header []
-        [ Widget.navbarWithMenu [ class "is-dark has-shadow" ]
+        [ Widget.navbarWithMenu [ class "is-fixed-top is-dark has-shadow" ]
             (Widget.defaultNavbar
-                |> Widget.setBrand
-                    (Widget.navbarItem div
-                        [ class "has-text-weight-bold"
+                |> Widget.setNavbarBrand
+                    { logo =
+                        Widget.navbarItem div
+                            [ class "has-text-weight-bold"
+                            ]
+                            [ text "Logo" ]
+                    , burger =
+                        [ Events.onClick ToggleBurger
                         ]
-                        [ text "Logo" ]
-                    )
-                |> Widget.setMenuStart
+                    }
+                |> Widget.setNavbarMenuOptions
+                    [ class <|
+                        if isMenuActive then
+                            "is-active"
+
+                        else
+                            ""
+                    ]
+                |> Widget.setNavbarStart
                     [ Widget.navbarItem a
                         [ href "#" ]
                         [ text "Home" ]
@@ -102,7 +155,10 @@ viewHeader =
 
 viewMain : List (Html msg) -> Html msg
 viewMain children =
-    main_ [ class "mt-4" ]
+    main_
+        [ class "mt-4"
+        , id "top"
+        ]
         [ Layout.fluidContainer []
             [ Columns.row
                 []
@@ -122,8 +178,15 @@ viewSidebar =
     Widget.menu []
         [ Widget.menuLabel [] [ text "Menu" ]
         , Widget.menuList []
-            [ li []
-                [ a [] [ text "Media" ] ]
+            [ Widget.menuAnchorItem
+                [ href "#top" ]
+                [ text "Top" ]
+            , Widget.menuAnchorItem
+                [ href "#media-object" ]
+                [ text "Media" ]
+            , Widget.menuAnchorItem
+                [ href "#buttons" ]
+                [ text "Button" ]
             ]
         ]
 
@@ -227,6 +290,132 @@ viewSelectVariants =
                         ]
                 )
                 basicSizes
+        }
+
+
+viewMessagesVariants : Html msg
+viewMessagesVariants =
+    renderShowcase [ id "message" ]
+        { subtitle = "Message"
+        , contents =
+            List.map
+                (\colorName ->
+                    Widget.message
+                        [ toIsModifier colorName ]
+                        (Widget.defaultMessage
+                            |> Widget.setMessageBody
+                                [ p []
+                                    [ text "Stet stet consequat sit et gubergren ut. Ut ex at labore nonumy at diam dolor kasd erat diam et erat consetetur duis. Lorem kasd et lorem diam delenit ad labore et sadipscing illum in amet eum ipsum kasd et ullamcorper. Eos stet nonumy consetetur qui stet ipsum autem sit. Gubergren zzril consequat stet quod feugiat sanctus sadipscing sed nulla dolor diam. Ea minim dolore autem. Dolore magna erat amet tempor duo. Aliquyam nobis dolores et ipsum sit et duo magna at vero amet. Euismod duo elitr. Ut dolor magna et et sea stet. Lobortis labore amet enim eum ullamcorper sit labore lorem stet diam diam kasd voluptua at invidunt eos consectetuer et. Eu volutpat elitr magna nonumy sit aliquyam dolore erat amet gubergren consetetur ipsum no eum amet adipiscing odio tempor. Magna kasd hendrerit." ]
+                                ]
+                        )
+                )
+                basicColors
+        }
+
+
+viewPagination : Html msg
+viewPagination =
+    renderShowcase
+        []
+        { subtitle = "Pagination"
+        , contents =
+            [ Widget.defaultPagination
+                |> Widget.setPaginationList
+                    (Widget.paginationEllipsis [] [ text "..." ]
+                        :: List.map
+                            (\number ->
+                                Widget.paginationLink (number == 2)
+                                    [ href "" ]
+                                    [ text <| String.fromInt number ]
+                            )
+                            [ 1, 2, 3, 4 ]
+                    )
+                |> Widget.pagination
+            ]
+        }
+
+
+viewDropdowns : Model -> Html Msg
+viewDropdowns model =
+    renderShowcase
+        []
+        { subtitle = "Dropdowns"
+        , contents =
+            [ Widget.dropdown
+                (getDropdownState 1 model)
+                [ class "mx-2" ]
+                (Widget.defaultDropdown
+                    |> Widget.setDropdownTrigger
+                        (El.asButton a
+                            [ class "is-danger is-light"
+                            , Events.onClick <| ToggleDropdownAt 1
+                            ]
+                            [ text "Expand It" ]
+                        )
+                    |> Widget.setDropdownContent
+                        [ Widget.dropdownItem div
+                            []
+                            [ p [] [ text "Inner content" ]
+                            ]
+                        ]
+                )
+            , Widget.dropdown
+                False
+                [ class "is-hoverable mx-2" ]
+                (Widget.defaultDropdown
+                    |> Widget.setDropdownTrigger
+                        (El.asButton a
+                            []
+                            [ text "Hover Me" ]
+                        )
+                    |> Widget.setDropdownContent
+                        [ Widget.dropdownItem div
+                            []
+                            [ p [] [ text "You got me." ]
+                            ]
+                        ]
+                )
+            , Widget.dropdown
+                (getDropdownState 3 model)
+                []
+                (Widget.defaultDropdown
+                    |> Widget.setDropdownTrigger
+                        (El.asButton a
+                            [ class "is-primary"
+                            , Events.onMouseEnter <| ToggleDropdownAt 3
+                            , Events.onMouseLeave <| ToggleDropdownAt 3
+                            ]
+                            [ text "More Content" ]
+                        )
+                    |> Widget.setDropdownContent
+                        [ Widget.dropdownItem div
+                            []
+                            [ p [] [ text "Coming early 2027." ]
+                            , p [] [ text "Get ready for this AAA title" ]
+                            ]
+                        ]
+                )
+            ]
+        }
+
+
+viewTabs : Html msg
+viewTabs =
+    renderShowcase
+        [ id "tabs" ]
+        { subtitle = "Tabs"
+        , contents =
+            [ Widget.tabs
+                []
+                (List.map
+                    (\labelText ->
+                        Widget.tabItem False
+                            []
+                            [ text labelText ]
+                    )
+                    [ "Play", "Stop", "Rewind" ]
+                )
+            ]
         }
 
 
