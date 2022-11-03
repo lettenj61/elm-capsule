@@ -30,27 +30,14 @@ main =
 
 
 type alias Model =
-    { example : Maybe Example
-    , burgerMenu : Bool
+    { burgerMenu : Bool
     , dropdowns : Dict Int Bool
     }
 
 
-type Example
-    = Welcome
-    | Typography
-    | Button
-    | Form
-    | Tags
-    | Message
-    | Modal
-    | Navigations
-
-
 init : Model
 init =
-    { example = Just Welcome
-    , burgerMenu = False
+    { burgerMenu = False
     , dropdowns = Dict.fromList []
     }
 
@@ -112,6 +99,7 @@ view model =
         , viewMain
             [ viewMedia
             , viewButtons
+            , viewCard
             , viewDropdowns model
             , viewSelectVariants
             , viewTabs
@@ -223,7 +211,7 @@ viewButtons =
     renderShowcase [ id "buttons" ]
         { subtitle = "Button"
         , contents =
-            [ Layout.buttons [ class "are-medium" ]
+            [ El.buttons [ class "are-medium" ]
                 (basicColors
                     |> List.map
                         (\colorName ->
@@ -232,7 +220,7 @@ viewButtons =
                                 [ text colorName ]
                         )
                 )
-            , Layout.buttons [ class "are-medium" ]
+            , El.buttons [ class "are-medium" ]
                 (basicColors
                     |> List.map
                         (\colorName ->
@@ -243,7 +231,7 @@ viewButtons =
                                 [ text colorName ]
                         )
                 )
-            , Layout.buttons [ class "are-medium" ]
+            , El.buttons [ class "are-medium" ]
                 (basicColors
                     |> List.map
                         (\colorName ->
@@ -267,7 +255,7 @@ viewSelectVariants =
                 (\sizeName ->
                     Form.field
                         []
-                        [ El.control []
+                        [ Form.control []
                             [ Form.select
                                 { wrapper = [ toIsModifier sizeName ]
                                 , inner = []
@@ -381,7 +369,7 @@ viewDropdowns model =
                 (Widget.defaultDropdown
                     |> Widget.setDropdownTrigger
                         (El.asButton a
-                            [ class "is-primary"
+                            [ class "is-primary is-outlined"
                             , Events.onMouseEnter <| ToggleDropdownAt 3
                             , Events.onMouseLeave <| ToggleDropdownAt 3
                             ]
@@ -414,6 +402,55 @@ viewTabs =
                             [ text labelText ]
                     )
                     [ "Play", "Stop", "Rewind" ]
+                )
+            ]
+        }
+
+
+viewCard : Html msg
+viewCard =
+    renderShowcase
+        []
+        { subtitle = "Cards"
+        , contents =
+            [ Widget.card
+                (Widget.defaultCard
+                    |> Widget.setCardHeader
+                        { title =
+                            Widget.cardHeaderTitle []
+                                [ text "Example title" ]
+                        , icon = Nothing
+                        }
+                    |> Widget.setCardImage
+                        { figure =
+                            [ class "image is-4by3"
+                            , class "has-background-primary"
+                            ]
+                        , image = []
+                        }
+                    |> Widget.setCardContent
+                        [ El.title [ class "is-4" ] [ text "Author Name" ]
+                        , El.subtitle [ class "is-6" ] [ text "@example" ]
+                        , El.content []
+                            [ p []
+                                [ text "Dolores clita stet diam euismod ipsum nonumy lorem sadipscing accusam takimata sed diam nonumy sanctus. Tempor autem diam qui amet blandit vulputate et et. Elitr takimata sea dolore zzril. Velit eos te et diam accusam facilisi erat aliquyam gubergren. Stet diam ipsum takimata amet vero justo ut est nostrud ea kasd consequat eos zzril justo magna accumsan et. In sanctus ad aliquam lobortis blandit exerci. Ea elitr sadipscing no diam blandit voluptua euismod et consetetur sit. Diam ipsum gubergren ipsum et dolore sed no sed invidunt duo lorem dolores ea diam nulla sit. Dolore sed duo nibh et rebum luptatum illum odio nulla aliquyam sed ipsum consetetur."
+                                ]
+                            ]
+                        ]
+                    |> Widget.setCardFooter
+                        [ Widget.cardFooterItem
+                            [ href "#"
+                            ]
+                            [ text "Reply" ]
+                        , Widget.cardFooterItem
+                            [ href "#"
+                            ]
+                            [ text "Share" ]
+                        , Widget.cardFooterItem
+                            [ href "#"
+                            ]
+                            [ text "Like" ]
+                        ]
                 )
             ]
         }

@@ -3,7 +3,7 @@
   "version": "0",
   "private": true,
   "scripts": {
-    "start": "parcel serve -p 9001 src/index.html"
+    "start": "parcel serve --no-cache -p 9001 src/index.html"
   },
   "devDependencies": {
     "@parcel/transformer-elm": "2.7.0",

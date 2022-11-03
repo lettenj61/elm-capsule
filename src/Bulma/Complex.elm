@@ -574,7 +574,7 @@ asCardHeaderIcon h =
 {-| -}
 cardFooterItem : List (Attribute msg) -> List (Html msg) -> Html msg
 cardFooterItem =
-    styled_ Html.a "card-footer"
+    styled_ Html.a "card-footer-item"
 
 
 {-| Structure for a dropdown component.
