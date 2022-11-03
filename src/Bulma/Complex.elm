@@ -1,5 +1,8 @@
 module Bulma.Complex exposing
     ( breadcrumb, breadcrumbItem
+    , CardHeaderProps, CardImageProps, CardProps, card, defaultCard
+    , setCardHeader, setCardImage, setCardContent, setCardFooter
+    , cardHeaderTitle, asCardHeaderIcon, cardFooterItem
     , DropdownProps, defaultDropdown, dropdown, dropdownItem, setDropdownContent, setDropdownTrigger
     , menu, menuLabel, menuList, menuAnchorItem
     , MessageProps, defaultMessage, message, setMessageHeader, setMessageOnDelete, setMessageBody
@@ -20,7 +23,9 @@ module Bulma.Complex exposing
 
 # Card
 
-Not implemented.
+@docs CardHeaderProps, CardImageProps, CardProps, card, defaultCard
+@docs setCardHeader, setCardImage, setCardContent, setCardFooter
+@docs cardHeaderTitle, asCardHeaderIcon, cardFooterItem
 
 
 # Dropdown
@@ -66,7 +71,7 @@ Not implemented.
 
 -}
 
-import Bulma.Internal exposing (styled_)
+import Bulma.Internal exposing (renderMaybe, styled_)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (attribute, class)
 
@@ -438,6 +443,138 @@ paginationLink isCurrent attributes children =
             (class activeClass :: attributes)
             children
         ]
+
+
+{-| -}
+type alias CardHeaderProps msg =
+    { title : Html msg
+    , icon : Maybe (Html msg)
+    }
+
+
+type alias CardImageProps msg =
+    { figure : List (Attribute msg)
+    , image : List (Attribute msg)
+    }
+
+
+{-| -}
+type alias CardProps msg =
+    { header : Maybe (CardHeaderProps msg)
+    , image : Maybe (CardImageProps msg)
+    , content : List (Html msg)
+    , footer : List (Html msg)
+    }
+
+
+{-| -}
+defaultCard : CardProps msg
+defaultCard =
+    { header = Nothing
+    , image = Nothing
+    , content = []
+    , footer = []
+    }
+
+
+{-| -}
+card : CardProps msg -> Html msg
+card props =
+    Html.div
+        [ class "card" ]
+        [ case props.header of
+            Just header ->
+                Html.header
+                    [ class "card-header" ]
+                    [ header.title
+                    , renderMaybe header.icon
+                    ]
+
+            Nothing ->
+                Html.text ""
+        , props.image
+            |> Maybe.map
+                (\{ figure, image } ->
+                    Html.div
+                        [ class "card-image" ]
+                        [ Html.figure
+                            figure
+                            [ Html.img image []
+                            ]
+                        ]
+                )
+            |> renderMaybe
+        , case props.content of
+            [] ->
+                Html.text ""
+
+            content ->
+                Html.div
+                    [ class "card-content" ]
+                    content
+        , case props.footer of
+            [] ->
+                Html.text ""
+
+            footer ->
+                Html.footer
+                    [ class "card-footer" ]
+                    footer
+        ]
+
+
+{-| -}
+setCardHeader : CardHeaderProps msg -> CardProps msg -> CardProps msg
+setCardHeader header props =
+    { props
+        | header = Just header
+    }
+
+
+{-| -}
+setCardImage : CardImageProps msg -> CardProps msg -> CardProps msg
+setCardImage image props =
+    { props
+        | image = Just image
+    }
+
+
+{-| -}
+setCardContent : List (Html msg) -> CardProps msg -> CardProps msg
+setCardContent content props =
+    { props
+        | content = content
+    }
+
+
+{-| -}
+setCardFooter : List (Html msg) -> CardProps msg -> CardProps msg
+setCardFooter footer props =
+    { props
+        | footer = footer
+    }
+
+
+{-| -}
+cardHeaderTitle : List (Attribute msg) -> List (Html msg) -> Html msg
+cardHeaderTitle =
+    styled_ Html.p "card-header-title"
+
+
+{-| -}
+asCardHeaderIcon :
+    (List (Attribute msg) -> List (Html msg) -> Html msg)
+    -> List (Attribute msg)
+    -> List (Html msg)
+    -> Html msg
+asCardHeaderIcon h =
+    styled_ h "card-header-icon"
+
+
+{-| -}
+cardFooterItem : List (Attribute msg) -> List (Html msg) -> Html msg
+cardFooterItem =
+    styled_ Html.a "card-footer"
 
 
 {-| Structure for a dropdown component.

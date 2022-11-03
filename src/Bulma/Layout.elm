@@ -49,7 +49,7 @@ module Bulma.Layout exposing
 
 -}
 
-import Bulma.Internal exposing (renderWhen, styled_)
+import Bulma.Internal exposing (renderMaybe, styled_)
 import Html exposing (Attribute, Html)
 import Html.Attributes exposing (class)
 
@@ -183,10 +183,10 @@ media props =
     styled_ Html.article
         "media"
         []
-        [ renderWhen props.left
+        [ renderMaybe props.left
         , Html.div [ class "media-content" ]
             props.content
-        , renderWhen props.right
+        , renderMaybe props.right
         ]
 
 

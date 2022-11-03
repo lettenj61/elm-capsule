@@ -1,11 +1,11 @@
-module Bulma.Internal exposing (renderWhen, styled_)
+module Bulma.Internal exposing (renderMaybe, styled_)
 
 import Html exposing (Attribute, Html)
 import Html.Attributes as Attributes
 
 
-renderWhen : Maybe (Html msg) -> Html msg
-renderWhen maybeNode =
+renderMaybe : Maybe (Html msg) -> Html msg
+renderMaybe maybeNode =
     maybeNode
         |> Maybe.withDefault (Html.text "")
 
